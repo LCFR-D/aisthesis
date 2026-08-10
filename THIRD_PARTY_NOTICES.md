@@ -1,7 +1,9 @@
 # Third-party notices
 
-The `lcfr-frontend-stack` release archive contains original LCFR text and templates under the MIT License. It does **not** redistribute third-party Agent Skill instructions, templates, code, assets, customer evidence, or private product artifacts.
+The `aisthesis` release archive contains independently written LCFR instructions and templates under the MIT License. It does **not** redistribute third-party Agent Skill bodies, protected examples, paid templates, code, assets, customer evidence, or private product artifacts.
 
-The skill is designed to interoperate with Agent Skills-compatible clients and may be used alongside separately installed design or engineering tools. Product and project names remain the property of their respective owners. Compatibility references do not imply sponsorship, endorsement, or inclusion.
+Aisthesis names capability families including Impeccable, Taste, Hallmark, Frontend Design, UI/UX pattern intelligence, interaction craft, and public design-system practice to make the bundle's scope and provenance understandable. Those names and projects remain the property of their respective owners. Capability references do not imply sponsorship, endorsement, or inclusion of their original files.
 
-Aisthesis uses third-party Python libraries under their own licences. Their dependency metadata is locked in `uv.lock`; they are not included in the standalone frontend-skill archive.
+Where a compatible external method informed the problem space, Aisthesis expresses the underlying capability independently and resolves it through LCFR's Metis authority and provenance rules. No separately installed skill is required to execute the bundled workflow.
+
+The Aisthesis Judgment Python toolkit uses third-party libraries under their own licences. Dependency metadata is locked in `uv.lock`; those libraries are not copied into the standalone Agent Skill archive.

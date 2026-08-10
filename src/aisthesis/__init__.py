@@ -1,4 +1,4 @@
-"""Aisthesis: evidence-led visual judgment for rendered interfaces."""
+"""Aisthesis Judgment: visual-evidence primitives for the frontend operating system."""
 
 from .perception import (
     cluster_visual_issues,
@@ -13,4 +13,4 @@ __all__ = [
     "evaluate_phase_pacing",
     "repetition_score",
 ]
-__version__ = "0.1.0"
+__version__ = "1.0.0"

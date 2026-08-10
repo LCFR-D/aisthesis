@@ -38,7 +38,7 @@ def test_frontend_stack_skill_is_valid() -> None:
     metadata = parse_frontmatter(
         (DEFAULT_SKILL / "SKILL.md").read_text(encoding="utf-8")
     )
-    assert metadata["name"] == "lcfr-frontend-stack"
+    assert metadata["name"] == "aisthesis"
     assert metadata["metadata"]["author"] == "LCFR"
     assert metadata["metadata"]["version"] == "1.0.0"
 
@@ -53,24 +53,24 @@ def test_release_archive_is_reproducible_and_self_contained(tmp_path: Path) -> N
 
     with zipfile.ZipFile(first) as bundle:
         names = bundle.namelist()
-        assert all(name.startswith("lcfr-frontend-stack/") for name in names)
+        assert all(name.startswith("aisthesis/") for name in names)
         assert all("\\" not in name and ".." not in Path(name).parts for name in names)
-        assert "lcfr-frontend-stack/SKILL.md" in names
-        assert "lcfr-frontend-stack/LICENSE" in names
-        assert "lcfr-frontend-stack/manifest.json" in names
-        manifest = json.loads(bundle.read("lcfr-frontend-stack/manifest.json"))
-        assert manifest["name"] == "lcfr-frontend-stack"
+        assert "aisthesis/SKILL.md" in names
+        assert "aisthesis/LICENSE" in names
+        assert "aisthesis/manifest.json" in names
+        manifest = json.loads(bundle.read("aisthesis/manifest.json"))
+        assert manifest["name"] == "aisthesis"
         assert manifest["version"] == "1.0.0"
         assert {entry["path"] for entry in manifest["files"]} == REQUIRED_PATHS
         for relative in REQUIRED_PATHS:
             assert (
-                bundle.read(f"lcfr-frontend-stack/{relative}")
+                bundle.read(f"aisthesis/{relative}")
                 == (DEFAULT_SKILL / relative).read_bytes()
             )
         extracted = tmp_path / "installed"
         bundle.extractall(extracted)
 
-    assert validate_skill(extracted / "lcfr-frontend-stack") == []
+    assert validate_skill(extracted / "aisthesis") == []
 
 
 @pytest.mark.parametrize("relative", sorted(REQUIRED_PATHS))
@@ -104,7 +104,7 @@ def test_installed_manifest_detects_byte_drift(tmp_path: Path) -> None:
     installed = tmp_path / "installed"
     with zipfile.ZipFile(archive) as bundle:
         bundle.extractall(installed)
-    skill = installed / "lcfr-frontend-stack"
+    skill = installed / "aisthesis"
     with (skill / "SKILL.md").open("a", encoding="utf-8") as stream:
         stream.write("\nmaterial drift\n")
     assert any("manifest" in error for error in validate_skill(skill))
@@ -115,7 +115,7 @@ def test_installed_manifest_is_required(tmp_path: Path) -> None:
     installed = tmp_path / "installed"
     with zipfile.ZipFile(archive) as bundle:
         bundle.extractall(installed)
-    skill = installed / "lcfr-frontend-stack"
+    skill = installed / "aisthesis"
     (skill / "manifest.json").unlink()
     assert "installed skill is missing manifest.json" in validate_skill(skill)
 
@@ -134,7 +134,7 @@ def test_installed_manifest_identity_fails_closed(
     installed = tmp_path / "installed"
     with zipfile.ZipFile(archive) as bundle:
         bundle.extractall(installed)
-    skill = installed / "lcfr-frontend-stack"
+    skill = installed / "aisthesis"
     (skill / "manifest.json").write_bytes(tampered_manifest)
     errors = validate_skill(skill)
     assert errors == ["manifest does not match the installed payload bytes"]
@@ -162,7 +162,7 @@ def test_duplicate_frontmatter_keys_fail_closed() -> None:
     assert capture_errors == []
     text = snapshot["SKILL.md"].decode("utf-8")
     snapshot["SKILL.md"] = text.replace(
-        "name: lcfr-frontend-stack", "name: lcfr-frontend-stack\nname: shadow"
+        "name: aisthesis", "name: aisthesis\nname: shadow"
     ).encode("utf-8")
     assert any("duplicate key" in error for error in validate_snapshot(snapshot))
 
@@ -206,8 +206,8 @@ def test_clean_room_install_refuses_existing_target(tmp_path: Path) -> None:
     staging = tmp_path / "staging"
     with zipfile.ZipFile(archive) as bundle:
         bundle.extractall(staging)
-    source = staging / "lcfr-frontend-stack"
-    target = tmp_path / "client" / "skills" / "lcfr-frontend-stack"
+    source = staging / "aisthesis"
+    target = tmp_path / "client" / "skills" / "aisthesis"
     target.parent.mkdir(parents=True)
     shutil.copytree(source, target)
     sentinel = target / "user-content.txt"
@@ -235,8 +235,8 @@ def test_output_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     "artifact_name",
     [
-        "lcfr-frontend-stack-1.0.0.zip",
-        "lcfr-frontend-stack-1.0.0.zip.sha256",
+        "aisthesis-1.0.0.zip",
+        "aisthesis-1.0.0.zip.sha256",
     ],
 )
 def test_dangling_output_artifact_symlink_is_rejected(

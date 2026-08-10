@@ -15,8 +15,8 @@ from yaml.constructor import ConstructorError
 from yaml.nodes import MappingNode
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SKILL = REPO_ROOT / "skills" / "lcfr-frontend-stack"
-SKILL_NAME = "lcfr-frontend-stack"
+DEFAULT_SKILL = REPO_ROOT / "skills" / "aisthesis"
+SKILL_NAME = "aisthesis"
 SKILL_VERSION = "1.0.0"
 REQUIRED_METADATA = {"name": SKILL_NAME, "license": "MIT"}
 ALLOWED_FRONTMATTER = {
@@ -32,16 +32,22 @@ REQUIRED_PATHS = frozenset(
         "SKILL.md",
         "LICENSE",
         "references/methodology.md",
+        "references/direction-and-taste.md",
         "references/design-and-brand.md",
+        "references/systems-and-product-ui.md",
+        "references/prototyping-and-rich-media.md",
         "references/implementation-and-interaction.md",
         "references/responsive-and-accessibility.md",
         "references/visual-evidence.md",
         "references/release-contract.md",
         "references/provenance.md",
-        "references/skill-map.md",
+        "references/capability-map.md",
         "templates/brief.md",
+        "templates/design-direction.md",
+        "templates/experience-architecture.md",
         "templates/system-contract.md",
         "templates/verification-matrix.md",
+        "templates/audit-report.md",
         "templates/release-evidence.md",
     }
 )
@@ -362,7 +368,7 @@ def validate_provenance(
         errors.append(
             "provenance skill name/version does not match the release contract"
         )
-    if skill.get("release_tag") != f"frontend-stack-v{SKILL_VERSION}":
+    if skill.get("release_tag") != f"aisthesis-v{SKILL_VERSION}":
         errors.append("provenance release tag does not match the skill version")
     if set(indexed) != REQUIRED_PATHS or len(indexed) != len(entries):
         errors.append("provenance file inventory does not match the release contract")
@@ -390,10 +396,9 @@ def validate_provenance(
     changelog = repo_root / "CHANGELOG.md"
     if (
         not changelog.is_file()
-        or f"Frontend Stack {SKILL_VERSION}"
-        not in changelog.read_text(encoding="utf-8")
+        or f"Aisthesis {SKILL_VERSION}" not in changelog.read_text(encoding="utf-8")
     ):
-        errors.append("changelog does not contain the current frontend-stack version")
+        errors.append("changelog does not contain the current Aisthesis version")
     notices = repo_root / "THIRD_PARTY_NOTICES.md"
     if (
         not notices.is_file()
@@ -408,7 +413,7 @@ def validate_provenance(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Validate the LCFR Frontend Stack skill"
+        description="Validate the Aisthesis frontend operating system skill"
     )
     parser.add_argument("skill", nargs="?", type=Path, default=DEFAULT_SKILL)
     args = parser.parse_args()

@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aisthesis-visual"
-version = "0.1.0"
-description = "Evidence-led visual judgment for rendered interfaces"
+version = "1.0.0"
+description = "A complete portable frontend operating system and visual-evidence toolkit"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"

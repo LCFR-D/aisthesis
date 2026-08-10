@@ -1,75 +1,68 @@
 # Aisthesis
 
-Aisthesis is an evidence-led visual judgment layer for rendered interfaces. It helps teams find the failures that pass ordinary frontend tests: pasted imagery, hard source seams, repeated wallpaper motifs, dead scroll distance, weak hierarchy and responsive scenes that technically fit but do not hold together.
-
-It does not produce an "aesthetic score." Aisthesis keeps three kinds of evidence separate:
-
-1. deterministic browser and image measurements;
-2. localized multimodal critique;
-3. explicit human acceptance or rejection.
+Aisthesis is LCFR's complete portable frontend operating system: one repository and one standalone Agent Skill for taking any web interface from product truth and design direction through implementation, deterministic browser evidence, visual judgment, and verified release.
 
 The name comes from the Greek *aisthesis*: perception.
 
-## Why
+## One bundled frontend system
 
-A page can pass accessibility, geometry and screenshot assertions while still looking wrong. A smooth animation can still be dull. Four visible product landmarks can still feel pasted together. One scalar hides the evidence needed to fix those problems.
+Aisthesis combines:
 
-Aisthesis turns visual review into a traceable process. Measurements stay measurements. Model observations cite frames and regions. Human judgment remains authoritative.
+- **Metis** for mode, scope, product truth, authority, provenance, and release governance;
+- **Taste and craft** for brief inference, subject-specific direction, structural variety, anti-template constraints, typography, composition, imagery, copy, and bounded polish;
+- **Kinetograph** for deterministic browser capture, authored progress, physical pacing, geometry, native input, and cross-engine evidence;
+- **Aisthesis Judgment** for localized composition, material, hierarchy, continuity, and temporal review while keeping human acceptance authoritative;
+- product-UI architecture, complete states, forms, dashboards, dense interfaces, design systems, tokens, components, responsive art, accessibility, performance, dogfooding, security review, and release engineering.
 
-## Included in 0.1
+It absorbs the functional coverage of LCFR's full frontend stack, including Impeccable, Taste, Hallmark, Frontend Design, UI/UX pattern intelligence, interaction craft, brand-system development, responsive generated art, scrolltelling QA, performance, dogfooding, and code review. The public instructions are independently written and provenance-safe. No separately installed design skill is required.
 
-- CIEDE2000 detection for long horizontal palette boundaries;
-- spatial self-similarity candidates for repeated imagery;
-- physical viewport-travel budgets for authored phases;
-- temporal clustering for adjacent detector hits;
-- a CLI for inspecting frames and checking phase pacing;
-- a review protocol for localized multimodal findings and human calibration.
+## Agent Skill
 
-## LCFR Frontend Stack skill
-
-The repository also ships **one standalone Agent Skill for LCFR's complete frontend workflow**: [`lcfr-frontend-stack`](skills/lcfr-frontend-stack/SKILL.md).
-
-It consolidates Metis governance, brand and responsive-art direction, interaction and native-scroll engineering, deterministic browser QA, Aisthesis visual judgment, accessibility, performance, dogfooding, independent review and verified release. The archive has no dependency on LCFR's private workspaces or separately installed design skills.
+The canonical standalone skill is [`skills/aisthesis`](skills/aisthesis/SKILL.md). It supports Build, Shape, Refine, Redesign, Audit, Study, Prototype, Polish, Harden, Adapt, Animate, Optimize, Extract, and Release routes across marketing sites, product interfaces, dashboards, documentation, portfolios, design systems, components, motion, and scroll narratives.
 
 ### Install the skill
 
-Download the immutable `frontend-stack-v1.0.0` release assets. The reviewed archive SHA-256 is `dafcf0407b4ee21a94694540c4172dc87b1c647d7f3a851435c61f2af2aaa33c`.
+Download the immutable `aisthesis-v1.0.0` release assets. The reviewed archive SHA-256 is `f4769cc4fb6ab24f70ddf99ff6d613b18e539e144a19d15b81e4fa8e1866d6d0`.
 
 **POSIX shell:**
 
 ```bash
 set -eu
 SKILLS_DIR="<your-agent-skills-directory>"
-TARGET="$SKILLS_DIR/lcfr-frontend-stack"
+TARGET="$SKILLS_DIR/aisthesis"
 test ! -e "$TARGET" || { echo "Refusing to replace $TARGET" >&2; exit 1; }
-curl -LO https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/lcfr-frontend-stack-1.0.0.zip
-curl -LO https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/lcfr-frontend-stack-1.0.0.zip.sha256
-sha256sum -c lcfr-frontend-stack-1.0.0.zip.sha256
+curl -LO https://github.com/LCFR-D/aisthesis/releases/download/aisthesis-v1.0.0/aisthesis-1.0.0.zip
+curl -LO https://github.com/LCFR-D/aisthesis/releases/download/aisthesis-v1.0.0/aisthesis-1.0.0.zip.sha256
+sha256sum -c aisthesis-1.0.0.zip.sha256
 STAGING="$(mktemp -d)"
-unzip -q lcfr-frontend-stack-1.0.0.zip -d "$STAGING"
-mv "$STAGING/lcfr-frontend-stack" "$TARGET"
+unzip -q aisthesis-1.0.0.zip -d "$STAGING"
+mv "$STAGING/aisthesis" "$TARGET"
 ```
 
 **PowerShell:**
 
 ```powershell
 $SkillsDir = "C:\path\to\your-agent-skills-directory"
-$Target = Join-Path $SkillsDir "lcfr-frontend-stack"
-if (Test-Path $Target) { throw "Refusing to replace $Target" }
-$Archive = "lcfr-frontend-stack-1.0.0.zip"
-$Expected = "dafcf0407b4ee21a94694540c4172dc87b1c647d7f3a851435c61f2af2aaa33c"
-Invoke-WebRequest "https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/$Archive" -OutFile $Archive
+$Target = Join-Path $SkillsDir "aisthesis"
+if (Test-Path -LiteralPath $Target) { throw "Refusing to replace $Target" }
+$Archive = "aisthesis-1.0.0.zip"
+$Expected = "f4769cc4fb6ab24f70ddf99ff6d613b18e539e144a19d15b81e4fa8e1866d6d0"
+Invoke-WebRequest "https://github.com/LCFR-D/aisthesis/releases/download/aisthesis-v1.0.0/$Archive" -OutFile $Archive
 if ((Get-FileHash $Archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $Expected) {
     throw "Archive checksum mismatch"
 }
 $Staging = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
-Expand-Archive $Archive -DestinationPath $Staging
-Move-Item (Join-Path $Staging "lcfr-frontend-stack") $Target
+Expand-Archive -LiteralPath $Archive -DestinationPath $Staging
+Move-Item -LiteralPath (Join-Path $Staging "aisthesis") -Destination $Target
 ```
 
-Use the user or project skills directory recognized by your Agent Skills-compatible client. The extracted directory is self-contained and starts at `lcfr-frontend-stack/SKILL.md`. The Python package and Agent Skill are separate installation artifacts. Source, templates, per-file provenance and deterministic packaging tests remain visible in this repository.
+Use the user or project skills directory recognized by your Agent Skills-compatible client. The extracted directory is self-contained and starts at `aisthesis/SKILL.md`.
 
-Trigger it with a request such as: `Use lcfr-frontend-stack to take this interface from brief through a verified release.`
+Trigger it with a request such as:
+
+```text
+Use Aisthesis to take this interface from product truth and direction through a verified release.
+```
 
 ### Validate or build the skill archive
 
@@ -79,9 +72,27 @@ uv run python -m scripts.validate_skill
 uv run python -m scripts.build_skill_release --output dist
 ```
 
-The builder creates a deterministic ZIP, a SHA-256 checksum and an internal file manifest.
+The builder creates a deterministic ZIP, SHA-256 checksum, and internal per-file manifest. Repository tests reject path traversal, non-portable paths, duplicate YAML, malformed manifests, symlinks, Windows junctions and reparse points, unsafe overwrite, and provenance drift.
 
-## Install the Aisthesis package
+## Aisthesis Judgment toolkit
+
+The repository also contains the Python evidence toolkit used by the Aisthesis Judgment layer. It keeps three evidence classes separate:
+
+1. deterministic browser and image measurements;
+2. localized multimodal observations;
+3. explicit human acceptance or rejection.
+
+It does not produce an aesthetic score.
+
+### Included detectors
+
+- CIEDE2000 candidates for long horizontal palette boundaries;
+- spatial self-similarity candidates for repeated imagery;
+- physical viewport-travel budgets for authored phases;
+- temporal grouping for adjacent detector hits;
+- a CLI for inspecting frames and checking phase pacing.
+
+### Install the toolkit
 
 ```bash
 python -m pip install -e .
@@ -89,7 +100,7 @@ python -m pip install -e .
 
 Python 3.11 or newer is required.
 
-## Inspect a rendered frame
+### Inspect a rendered frame
 
 ```bash
 aisthesis inspect frame.png --output findings.json
@@ -97,7 +108,7 @@ aisthesis inspect frame.png --output findings.json
 
 The result reports seam and repetition candidates. It does not claim the frame is good or bad.
 
-## Check physical pacing
+### Check physical pacing
 
 ```bash
 aisthesis pace \
@@ -111,7 +122,7 @@ aisthesis pace \
 
 This measures the phase in viewport heights. Reduced-motion profiles can be excluded from animated pacing budgets with `--reduced-motion`.
 
-## Python API
+### Python API
 
 ```python
 from PIL import Image
@@ -125,28 +136,26 @@ repetition = repetition_score(frame)
 
 ## Review boundary
 
-Aisthesis can establish where a long palette boundary appears, whether a motif repeats, and how much physical scroll a phase consumes. It cannot establish taste, intent or acceptance from those measurements.
+Aisthesis can establish where a long palette boundary appears, whether a motif repeats, how much physical scroll a phase consumes, and where a rendered composition deserves inspection. It cannot establish taste, intent, usefulness, or acceptance from those measurements.
 
-Use `docs/review-protocol.md` to run separate overlap, palette, composition and temporal passes. Every finding should cite a profile, frame, normalized progress and region. Record the suspected owner separately from the visible observation.
+Use `docs/review-protocol.md` to run separate identity, overlap, palette/material, composition, temporal, and content-trust passes. Record the suspected implementation owner separately from the visible observation.
 
 ## Test
 
 ```bash
-python -m pip install -e . pytest
-pytest -q
+uv sync --locked --dev
+uv run pytest -q
 ```
-
-## Status
-
-Version 0.1 is an early public release. The deterministic detectors are useful now, but they produce candidates rather than verdicts. Planned work includes a stable finding schema, DOM-to-pixel ownership maps, optional semantic-mask adapters and a calibration corpus.
 
 ## Principles
 
+- Product truth and the approved brief outrank style advice.
 - Human rejection outranks a passing metric.
 - A model observation is not an implementation cause.
 - Exact frames are evidence; sparse contact sheets are summaries.
-- Visual quality should not collapse into one score.
+- Visual quality must not collapse into one score.
 - Public examples must not contain private product evidence or customer data.
+- One portable bundle must be enough to execute the complete frontend workflow.
 
 ## License
 
@@ -157,7 +166,7 @@ MIT. See [LICENSE](LICENSE).
 - [Contributing](CONTRIBUTING.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security policy and private reporting](SECURITY.md)
-- [Frontend-stack changelog](CHANGELOG.md)
+- [Changelog](CHANGELOG.md)
 - [Skill provenance](provenance.toml)
 - [Third-party notices](THIRD_PARTY_NOTICES.md)
 
