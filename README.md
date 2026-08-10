@@ -98,4 +98,12 @@ Version 0.1 is an early public release. The deterministic detectors are useful n
 
 ## License
 
-MIT. See `LICENSE`.
+MIT. See [LICENSE](LICENSE).
+
+## Community and security
+
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security policy and private reporting](SECURITY.md)
+
+Aisthesis was developed at [LCFR](https://lcfr.xyz).
