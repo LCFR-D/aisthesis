@@ -6,14 +6,7 @@ compatibility: Works with Agent Skills clients; execution requires filesystem, s
 metadata:
   author: LCFR
   version: 1.0.0
-  tags:
-    - frontend
-    - design-systems
-    - responsive
-    - accessibility
-    - visual-qa
-    - performance
-    - release
+  tags: frontend, design-systems, responsive, accessibility, visual-qa, performance, release
 ---
 
 # LCFR Frontend Stack

@@ -16,7 +16,7 @@ installer = "none"
 
 [generated]
 path = "manifest.json"
-sha256 = "26b36365253988e1dbbad0f065203b4d968ead96b20b67c340d2db1d5ac36afe"
+sha256 = "0bb1a3f361e99b36ecc45f1dbfa0a4d6af356e61b984ab7f8e0e01598c575923"
 origin = "LCFR deterministic release builder"
 license = "MIT"
 
@@ -28,7 +28,7 @@ license = "MIT"
 
 [[files]]
 path = "SKILL.md"
-sha256 = "2f0741267e3c95018b60fd6c483234cc8193da2bf23a41d8e8e252e0dbbb28aa"
+sha256 = "e7f360eb842ee6947d572139edb7754ccd6e0a85a993bafb077004373f4595b2"
 origin = "LCFR original consolidated frontend operating system"
 license = "MIT"
 

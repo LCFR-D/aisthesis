@@ -33,7 +33,7 @@ It consolidates Metis governance, brand and responsive-art direction, interactio
 
 ### Install the skill
 
-Download the immutable `frontend-stack-v1.0.0` release assets. The reviewed archive SHA-256 is `6e70e1911d5eac25028b71e9a72f54f55d4477c67a51a8fa16d5876d79d6146c`.
+Download the immutable `frontend-stack-v1.0.0` release assets. The reviewed archive SHA-256 is `dafcf0407b4ee21a94694540c4172dc87b1c647d7f3a851435c61f2af2aaa33c`.
 
 **POSIX shell:**
 
@@ -57,7 +57,7 @@ $SkillsDir = "C:\path\to\your-agent-skills-directory"
 $Target = Join-Path $SkillsDir "lcfr-frontend-stack"
 if (Test-Path $Target) { throw "Refusing to replace $Target" }
 $Archive = "lcfr-frontend-stack-1.0.0.zip"
-$Expected = "6e70e1911d5eac25028b71e9a72f54f55d4477c67a51a8fa16d5876d79d6146c"
+$Expected = "dafcf0407b4ee21a94694540c4172dc87b1c647d7f3a851435c61f2af2aaa33c"
 Invoke-WebRequest "https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/$Archive" -OutFile $Archive
 if ((Get-FileHash $Archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $Expected) {
     throw "Archive checksum mismatch"

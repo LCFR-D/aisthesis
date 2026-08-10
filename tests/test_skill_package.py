@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
+import subprocess
 import zipfile
 from pathlib import Path
 
@@ -107,6 +109,36 @@ def test_installed_manifest_detects_byte_drift(tmp_path: Path) -> None:
     assert any("manifest" in error for error in validate_skill(skill))
 
 
+def test_installed_manifest_is_required(tmp_path: Path) -> None:
+    archive, _ = build_release(tmp_path / "output")
+    installed = tmp_path / "installed"
+    with zipfile.ZipFile(archive) as bundle:
+        bundle.extractall(installed)
+    skill = installed / "lcfr-frontend-stack"
+    (skill / "manifest.json").unlink()
+    assert "installed skill is missing manifest.json" in validate_skill(skill)
+
+
+@pytest.mark.parametrize(
+    "tampered_manifest",
+    [
+        b"[]\n",
+        b'{"format":999,"name":"wrong","version":"99.0.0","license":"Proprietary","files":[]}\n',
+    ],
+)
+def test_installed_manifest_identity_fails_closed(
+    tmp_path: Path, tampered_manifest: bytes
+) -> None:
+    archive, _ = build_release(tmp_path / "output")
+    installed = tmp_path / "installed"
+    with zipfile.ZipFile(archive) as bundle:
+        bundle.extractall(installed)
+    skill = installed / "lcfr-frontend-stack"
+    (skill / "manifest.json").write_bytes(tampered_manifest)
+    errors = validate_skill(skill)
+    assert errors == ["manifest does not match the installed payload bytes"]
+
+
 def test_provenance_detects_source_byte_drift() -> None:
     snapshot, capture_errors = capture_skill(DEFAULT_SKILL)
     assert capture_errors == []
@@ -209,6 +241,24 @@ def test_skill_root_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
     assert any(
         "skill root is a link or junction" in error for error in validate_skill(linked)
     )
+
+
+@pytest.mark.skipif(os.name != "nt", reason="Windows junction test")
+def test_source_junction_is_rejected(tmp_path: Path) -> None:
+    candidate = copy_skill(tmp_path / "candidate")
+    external = tmp_path / "external-references"
+    shutil.copytree(candidate / "references", external)
+    shutil.rmtree(candidate / "references")
+    result = subprocess.run(
+        ["cmd.exe", "/c", "mklink", "/J", str(candidate / "references"), str(external)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        pytest.skip(f"junction creation unavailable: {result.stderr}")
+    with pytest.raises(ValueError, match="links and junctions are not allowed"):
+        build_release(tmp_path / "output", candidate)
 
 
 def test_public_skill_contains_no_private_paths_or_secret_tokens() -> None:

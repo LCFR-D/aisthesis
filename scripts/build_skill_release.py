@@ -11,6 +11,7 @@ from scripts.validate_skill import (
     REPO_ROOT,
     REQUIRED_PATHS,
     capture_skill,
+    is_link_or_junction,
     manifest_bytes,
     parse_frontmatter,
     validate_provenance,
@@ -24,17 +25,12 @@ def file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _is_link_or_junction(path: Path) -> bool:
-    is_junction = getattr(os.path, "isjunction", lambda _path: False)
-    return path.is_symlink() or bool(is_junction(path))
-
-
 def _validate_output_path(output_dir: Path) -> None:
     current = output_dir
     while not current.exists() and current != current.parent:
         current = current.parent
     for candidate in (current, *current.parents):
-        if _is_link_or_junction(candidate):
+        if is_link_or_junction(candidate):
             raise ValueError(f"output path traverses a link or junction: {candidate}")
 
 

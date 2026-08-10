@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import re
+import stat
 import tomllib
 import unicodedata
 from pathlib import Path, PurePosixPath
@@ -123,10 +124,18 @@ def sha256_bytes(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def _is_link_or_junction(path: Path) -> bool:
-    return path.is_symlink() or (
+def is_link_or_junction(path: Path) -> bool:
+    if path.is_symlink() or (
         hasattr(os.path, "isjunction") and os.path.isjunction(path)
-    )
+    ):
+        return True
+    if os.name == "nt":
+        try:
+            attributes = path.lstat().st_file_attributes
+        except (AttributeError, OSError):
+            return False
+        return bool(attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT)
+    return False
 
 
 def portable_path_errors(paths: set[str] | frozenset[str]) -> list[str]:
@@ -159,14 +168,14 @@ def portable_path_errors(paths: set[str] | frozenset[str]) -> list[str]:
 
 
 def capture_skill(skill_root: Path) -> tuple[dict[str, bytes], list[str]]:
-    if _is_link_or_junction(skill_root):
+    if is_link_or_junction(skill_root):
         return {}, [f"skill root is a link or junction: {skill_root}"]
     root = skill_root.resolve(strict=True)
     snapshot: dict[str, bytes] = {}
     errors: list[str] = []
     for path in sorted(root.rglob("*")):
         relative = path.relative_to(root).as_posix()
-        if _is_link_or_junction(path):
+        if is_link_or_junction(path):
             errors.append(f"links and junctions are not allowed: {relative}")
         elif path.is_file():
             snapshot[relative] = path.read_bytes()
@@ -199,7 +208,9 @@ def manifest_bytes(snapshot: dict[str, bytes]) -> bytes:
     return (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode("utf-8")
 
 
-def validate_snapshot(snapshot: dict[str, bytes]) -> list[str]:
+def validate_snapshot(
+    snapshot: dict[str, bytes], *, require_manifest: bool = False
+) -> list[str]:
     errors: list[str] = []
     actual = set(snapshot)
     missing = REQUIRED_PATHS - actual
@@ -208,6 +219,8 @@ def validate_snapshot(snapshot: dict[str, bytes]) -> list[str]:
         errors.append(f"missing required files: {sorted(missing)}")
     if unexpected:
         errors.append(f"unexpected skill files: {sorted(unexpected)}")
+    if require_manifest and "manifest.json" not in actual:
+        errors.append("installed skill is missing manifest.json")
     errors.extend(portable_path_errors(actual))
     if missing:
         return errors
@@ -265,12 +278,8 @@ def validate_snapshot(snapshot: dict[str, bytes]) -> list[str]:
     elif version != SKILL_VERSION:
         errors.append(f"metadata.version must equal release version {SKILL_VERSION}")
     tags = nested.get("tags")
-    if (
-        not isinstance(tags, list)
-        or not tags
-        or not all(isinstance(tag, str) for tag in tags)
-    ):
-        errors.append("metadata.tags must be a non-empty string list")
+    if not isinstance(tags, str) or not tags.strip():
+        errors.append("metadata.tags must be a non-empty string")
 
     for relative, payload in decoded.items():
         if not payload.strip():
@@ -309,9 +318,15 @@ def validate_snapshot(snapshot: dict[str, bytes]) -> list[str]:
     return errors
 
 
-def validate_skill(skill_root: Path = DEFAULT_SKILL) -> list[str]:
+def validate_skill(
+    skill_root: Path = DEFAULT_SKILL, *, require_manifest: bool | None = None
+) -> list[str]:
+    if require_manifest is None:
+        require_manifest = skill_root.resolve() != DEFAULT_SKILL.resolve()
     snapshot, capture_errors = capture_skill(skill_root)
-    return capture_errors + validate_snapshot(snapshot)
+    return capture_errors + validate_snapshot(
+        snapshot, require_manifest=require_manifest
+    )
 
 
 def validate_provenance(
