@@ -21,7 +21,7 @@ Aisthesis turns visual review into a traceable process. Measurements stay measur
 - CIEDE2000 detection for long horizontal palette boundaries;
 - spatial self-similarity candidates for repeated imagery;
 - physical viewport-travel budgets for authored phases;
-- causal clustering for repeated detector hits;
+- temporal clustering for adjacent detector hits;
 - a CLI for inspecting frames and checking phase pacing;
 - a review protocol for localized multimodal findings and human calibration.
 
@@ -72,10 +72,6 @@ repetition = repetition_score(frame)
 Aisthesis can establish where a long palette boundary appears, whether a motif repeats, and how much physical scroll a phase consumes. It cannot establish taste, intent or acceptance from those measurements.
 
 Use `docs/review-protocol.md` to run separate overlap, palette, composition and temporal passes. Every finding should cite a profile, frame, normalized progress and region. Record the suspected owner separately from the visible observation.
-
-## Relationship to Kinetograph
-
-Aisthesis began as the visual judgment layer above Kinetograph, LCFR's deterministic scroll-narrative capture system. Kinetograph establishes what rendered, where and when. Aisthesis combines that evidence with localized visual review and human calibration. The Python API also works independently on image arrays and phase metadata.
 
 ## Test
 

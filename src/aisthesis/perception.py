@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import cv2
 import numpy as np
 from skimage.color import deltaE_ciede2000, rgb2lab
@@ -15,6 +17,16 @@ def detect_horizontal_seams(
     """Return long horizontal palette discontinuities, excluding viewport-edge chrome."""
     if image.ndim != 3 or image.shape[2] != 3:
         raise ValueError("image must be an RGB array")
+    if not math.isfinite(minimum_coverage) or not 0 <= minimum_coverage <= 1:
+        raise ValueError("minimum_coverage must be finite and between 0 and 1")
+    if not math.isfinite(minimum_delta_e) or minimum_delta_e < 0:
+        raise ValueError("minimum_delta_e must be finite and non-negative")
+    if (
+        not isinstance(edge_margin, int)
+        or isinstance(edge_margin, bool)
+        or edge_margin < 0
+    ):
+        raise ValueError("edge_margin must be a non-negative integer")
     rgb = image
     if rgb.shape[1] > 640:
         rgb = cv2.resize(rgb, (640, rgb.shape[0]), interpolation=cv2.INTER_AREA)
@@ -33,6 +45,12 @@ def repetition_score(image: np.ndarray, *, minimum_shift: int | None = None) -> 
     """Find the strongest repeated horizontal or vertical image offset."""
     if image.ndim != 3 or image.shape[2] != 3:
         raise ValueError("image must be an RGB array")
+    if minimum_shift is not None and (
+        not isinstance(minimum_shift, int)
+        or isinstance(minimum_shift, bool)
+        or minimum_shift < 1
+    ):
+        raise ValueError("minimum_shift must be a positive integer")
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY).astype(np.float32)
     if gray.shape[1] > 320:
         scale = 320 / gray.shape[1]
@@ -66,15 +84,35 @@ def repetition_score(image: np.ndarray, *, minimum_shift: int | None = None) -> 
 
 def evaluate_phase_pacing(profile: dict, phase: dict) -> dict:
     """Evaluate a narrative phase against an authored physical-distance budget."""
-    start, end = phase["range"]
+    phase_id = phase["id"]
+    start, end = (float(value) for value in phase["range"])
+    travel = float(profile["travel"])
+    viewport_height = float(profile["viewport"]["height"])
     minimum = phase.get("minViewportTravel")
     maximum = phase.get("maxViewportTravel")
-    if end <= start:
-        raise ValueError(f"phase {phase['id']} range must increase")
+    minimum = None if minimum is None else float(minimum)
+    maximum = None if maximum is None else float(maximum)
+
+    if not math.isfinite(start) or not math.isfinite(end):
+        raise ValueError(f"phase {phase_id} range values must be finite")
+    if not 0 <= start < end <= 1:
+        raise ValueError(f"phase {phase_id} range must increase within 0 and 1")
+    if not math.isfinite(travel) or travel < 0:
+        raise ValueError("profile travel must be finite and non-negative")
+    if not math.isfinite(viewport_height) or viewport_height <= 0:
+        raise ValueError("profile viewport height must be finite and positive")
+    if minimum is not None and (not math.isfinite(minimum) or minimum < 0):
+        raise ValueError(
+            f"phase {phase_id} minimum travel must be finite and non-negative"
+        )
+    if maximum is not None and (not math.isfinite(maximum) or maximum < 0):
+        raise ValueError(
+            f"phase {phase_id} maximum travel must be finite and non-negative"
+        )
     if minimum is not None and maximum is not None and minimum > maximum:
-        raise ValueError(f"phase {phase['id']} minimum travel exceeds maximum")
-    viewport_height = float(profile["viewport"]["height"])
-    viewport_travel = float(profile["travel"]) * (end - start) / viewport_height
+        raise ValueError(f"phase {phase_id} minimum travel exceeds maximum")
+
+    viewport_travel = travel * (end - start) / viewport_height
     skipped = (
         profile.get("reducedMotion") == "reduce" or "reduced-motion" in profile["id"]
     )
@@ -83,7 +121,7 @@ def evaluate_phase_pacing(profile: dict, phase: dict) -> dict:
         and (maximum is None or viewport_travel <= maximum)
     )
     return {
-        "phase": phase["id"],
+        "phase": phase_id,
         "profile": profile["id"],
         "range": [start, end],
         "viewportTravel": viewport_travel,
@@ -97,7 +135,9 @@ def evaluate_phase_pacing(profile: dict, phase: dict) -> dict:
 def cluster_visual_issues(
     issues: list[dict], *, maximum_progress_gap: float = 0.06
 ) -> list[dict]:
-    """Collapse consecutive detector hits into one causal interval."""
+    """Collapse adjacent detector hits into one temporal interval."""
+    if not math.isfinite(maximum_progress_gap) or maximum_progress_gap < 0:
+        raise ValueError("maximum_progress_gap must be finite and non-negative")
     frame_types = {"hard-horizontal-seam", "repeated-motif"}
     candidates = sorted(
         (

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.27"]
+requires = ["hatchling==1.31.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -22,7 +22,12 @@ dependencies = [
 aisthesis = "aisthesis.cli:main"
 
 [dependency-groups]
-dev = ["pytest>=8,<10"]
+dev = [
+    "bandit>=1.9.4",
+    "pip-audit>=2.10.1",
+    "pytest>=8,<10",
+    "ruff>=0.16.2",
+]
 
 [project.urls]
 Homepage = "https://github.com/LCFR-D/aisthesis"

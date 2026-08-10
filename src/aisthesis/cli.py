@@ -11,7 +11,7 @@ from .perception import detect_horizontal_seams, evaluate_phase_pacing, repetiti
 
 
 def _write(result: dict, output: str | None) -> None:
-    payload = json.dumps(result, indent=2)
+    payload = json.dumps(result, indent=2, allow_nan=False)
     if output:
         Path(output).write_text(payload + "\n", encoding="utf-8")
     print(payload)
@@ -46,17 +46,20 @@ def main() -> None:
     args = parser.parse_args()
     if args.command == "inspect":
         image = np.asarray(Image.open(args.image).convert("RGB"))
-        result = {
-            "image": str(Path(args.image)),
-            "horizontalSeams": detect_horizontal_seams(
-                image,
-                minimum_coverage=args.minimum_coverage,
-                minimum_delta_e=args.minimum_delta_e,
-            ),
-            "repetition": repetition_score(image),
-            "judgmentBoundary": "Candidates are measurements, not an aesthetic verdict or human acceptance.",
-        }
-        _write(result, args.output)
+        try:
+            result = {
+                "image": str(Path(args.image)),
+                "horizontalSeams": detect_horizontal_seams(
+                    image,
+                    minimum_coverage=args.minimum_coverage,
+                    minimum_delta_e=args.minimum_delta_e,
+                ),
+                "repetition": repetition_score(image),
+                "judgmentBoundary": "Candidates are measurements, not an aesthetic verdict or human acceptance.",
+            }
+            _write(result, args.output)
+        except (TypeError, ValueError) as error:
+            parser.error(str(error))
         return
     profile = {
         "id": args.profile,
@@ -71,7 +74,10 @@ def main() -> None:
         "minViewportTravel": args.minimum,
         "maxViewportTravel": args.maximum,
     }
-    _write(evaluate_phase_pacing(profile, phase), args.output)
+    try:
+        _write(evaluate_phase_pacing(profile, phase), args.output)
+    except (TypeError, ValueError) as error:
+        parser.error(str(error))
 
 
 if __name__ == "__main__":
