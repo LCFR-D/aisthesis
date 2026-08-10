@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aisthesis-visual"
+version = "0.1.0"
+description = "Evidence-led visual judgment for rendered interfaces"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{name = "LCFR"}]
+keywords = ["visual-qa", "computer-vision", "frontend", "design-systems", "evaluation"]
+dependencies = [
+  "numpy>=2.0,<3",
+  "opencv-python-headless>=4.10,<5",
+  "pillow>=11,<13",
+  "scikit-image>=0.24,<1",
+]
+
+[project.scripts]
+aisthesis = "aisthesis.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[project.urls]
+Homepage = "https://github.com/LCFR-D/aisthesis"
+Repository = "https://github.com/LCFR-D/aisthesis"
+Issues = "https://github.com/LCFR-D/aisthesis/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aisthesis"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
