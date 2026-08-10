@@ -231,6 +231,30 @@ def test_output_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
         build_release(linked_output)
 
 
+@pytest.mark.parametrize(
+    "artifact_name",
+    [
+        "lcfr-frontend-stack-1.0.0.zip",
+        "lcfr-frontend-stack-1.0.0.zip.sha256",
+    ],
+)
+def test_dangling_output_artifact_symlink_is_rejected(
+    tmp_path: Path, artifact_name: str
+) -> None:
+    output = tmp_path / "output"
+    output.mkdir()
+    external = tmp_path / f"external-{artifact_name.replace('.', '-')}"
+    linked_artifact = output / artifact_name
+    try:
+        linked_artifact.symlink_to(external)
+    except OSError:
+        pytest.skip("file symlinks are unavailable on this runner")
+    with pytest.raises((FileExistsError, ValueError), match="overwrite|link|junction"):
+        build_release(output)
+    assert linked_artifact.is_symlink()
+    assert not external.exists()
+
+
 def test_skill_root_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
     source = copy_skill(tmp_path / "source")
     linked = tmp_path / "linked"
@@ -241,6 +265,29 @@ def test_skill_root_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
     assert any(
         "skill root is a link or junction" in error for error in validate_skill(linked)
     )
+
+
+def test_skill_under_linked_parent_is_rejected(tmp_path: Path) -> None:
+    real_parent = tmp_path / "real-parent"
+    real_parent.mkdir()
+    copy_skill(real_parent / "candidate")
+    linked_parent = tmp_path / "linked-parent"
+    if os.name == "nt":
+        result = subprocess.run(
+            ["cmd.exe", "/c", "mklink", "/J", str(linked_parent), str(real_parent)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            pytest.skip(f"junction creation unavailable: {result.stderr}")
+    else:
+        try:
+            linked_parent.symlink_to(real_parent, target_is_directory=True)
+        except OSError:
+            pytest.skip("directory symlinks are unavailable on this runner")
+    with pytest.raises(ValueError, match="source path traverses a link or junction"):
+        build_release(tmp_path / "output", linked_parent / "candidate")
 
 
 @pytest.mark.skipif(os.name != "nt", reason="Windows junction test")

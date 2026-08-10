@@ -168,9 +168,13 @@ def portable_path_errors(paths: set[str] | frozenset[str]) -> list[str]:
 
 
 def capture_skill(skill_root: Path) -> tuple[dict[str, bytes], list[str]]:
-    if is_link_or_junction(skill_root):
-        return {}, [f"skill root is a link or junction: {skill_root}"]
-    root = skill_root.resolve(strict=True)
+    lexical_root = Path(os.path.abspath(skill_root))
+    if is_link_or_junction(lexical_root):
+        return {}, [f"skill root is a link or junction: {lexical_root}"]
+    for ancestor in lexical_root.parents:
+        if is_link_or_junction(ancestor):
+            return {}, [f"source path traverses a link or junction: {ancestor}"]
+    root = lexical_root.resolve(strict=True)
     snapshot: dict[str, bytes] = {}
     errors: list[str] = []
     for path in sorted(root.rglob("*")):

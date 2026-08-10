@@ -60,7 +60,7 @@ def build_release(
     output_dir.mkdir(parents=True, exist_ok=True)
     archive = output_dir / f"{name}-{version}.zip"
     checksum = archive.with_suffix(archive.suffix + ".sha256")
-    if archive.exists() or checksum.exists():
+    if os.path.lexists(archive) or os.path.lexists(checksum):
         raise FileExistsError("refusing to overwrite an existing release artifact")
 
     with zipfile.ZipFile(
