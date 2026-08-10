@@ -25,7 +25,38 @@ Aisthesis turns visual review into a traceable process. Measurements stay measur
 - a CLI for inspecting frames and checking phase pacing;
 - a review protocol for localized multimodal findings and human calibration.
 
-## Install
+## LCFR Frontend Stack skill
+
+The repository also ships **one standalone Agent Skill for LCFR's complete frontend workflow**: [`lcfr-frontend-stack`](skills/lcfr-frontend-stack/SKILL.md).
+
+It consolidates Metis governance, brand and responsive-art direction, interaction and native-scroll engineering, deterministic browser QA, Aisthesis visual judgment, accessibility, performance, dogfooding, independent review and verified release. The archive has no dependency on LCFR's private workspaces or separately installed design skills.
+
+### Install the skill
+
+Download the immutable `frontend-stack-v1.0.0` release assets:
+
+```bash
+curl -LO https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/lcfr-frontend-stack-1.0.0.zip
+curl -LO https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/lcfr-frontend-stack-1.0.0.zip.sha256
+sha256sum -c lcfr-frontend-stack-1.0.0.zip.sha256
+unzip lcfr-frontend-stack-1.0.0.zip -d <your-agent-skills-directory>
+```
+
+Use the user or project skills directory recognized by your Agent Skills-compatible client. The extracted directory is self-contained and starts at `lcfr-frontend-stack/SKILL.md`. Source, templates, provenance and deterministic packaging tests remain visible in this repository.
+
+Trigger it with a request such as: `Use lcfr-frontend-stack to take this interface from brief through a verified release.`
+
+### Validate or build the skill archive
+
+```bash
+uv sync --locked --dev
+uv run python -m scripts.validate_skill
+uv run python -m scripts.build_skill_release --output dist
+```
+
+The builder creates a deterministic ZIP, a SHA-256 checksum and an internal file manifest.
+
+## Install the Aisthesis package
 
 ```bash
 python -m pip install -e .
@@ -101,5 +132,8 @@ MIT. See [LICENSE](LICENSE).
 - [Contributing](CONTRIBUTING.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security policy and private reporting](SECURITY.md)
+- [Frontend-stack changelog](CHANGELOG.md)
+- [Skill provenance](provenance.toml)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
 
 Aisthesis was developed at [LCFR](https://lcfr.xyz).

@@ -1,0 +1,87 @@
+schema_version = 1
+
+[skill]
+name = "lcfr-frontend-stack"
+version = "1.0.0"
+author = "LCFR"
+license = "MIT"
+canonical_path = "skills/lcfr-frontend-stack"
+release_tag = "frontend-stack-v1.0.0"
+
+[distribution]
+third_party_skill_text_included = false
+private_product_evidence_included = false
+customer_data_included = false
+generated_assets_included = false
+artifact_builder = "python -m scripts.build_skill_release"
+validator = "python -m scripts.validate_skill"
+
+[[files]]
+path = "LICENSE"
+origin = "LCFR original public skill licence"
+license = "MIT"
+
+[[files]]
+path = "SKILL.md"
+origin = "LCFR original consolidated frontend operating system"
+license = "MIT"
+
+[[files]]
+path = "references/design-and-brand.md"
+origin = "LCFR original brand-system and responsive-art method"
+license = "MIT"
+
+[[files]]
+path = "references/implementation-and-interaction.md"
+origin = "LCFR original frontend implementation and native-interaction method"
+license = "MIT"
+
+[[files]]
+path = "references/methodology.md"
+origin = "LCFR original Metis governance and evidence method"
+license = "MIT"
+
+[[files]]
+path = "references/provenance.md"
+origin = "LCFR original public provenance statement"
+license = "MIT"
+
+[[files]]
+path = "references/release-contract.md"
+origin = "LCFR original dogfood, performance, and release method"
+license = "MIT"
+
+[[files]]
+path = "references/responsive-and-accessibility.md"
+origin = "LCFR original responsive, state-completeness, and accessibility method"
+license = "MIT"
+
+[[files]]
+path = "references/skill-map.md"
+origin = "LCFR original capability-composition map"
+license = "MIT"
+
+[[files]]
+path = "references/visual-evidence.md"
+origin = "LCFR original Kinetograph and Aisthesis evidence method"
+license = "MIT"
+
+[[files]]
+path = "templates/brief.md"
+origin = "LCFR original frontend brief template"
+license = "MIT"
+
+[[files]]
+path = "templates/release-evidence.md"
+origin = "LCFR original release evidence template"
+license = "MIT"
+
+[[files]]
+path = "templates/system-contract.md"
+origin = "LCFR original frontend system contract template"
+license = "MIT"
+
+[[files]]
+path = "templates/verification-matrix.md"
+origin = "LCFR original cross-engine verification matrix"
+license = "MIT"
