@@ -33,16 +33,41 @@ It consolidates Metis governance, brand and responsive-art direction, interactio
 
 ### Install the skill
 
-Download the immutable `frontend-stack-v1.0.0` release assets:
+Download the immutable `frontend-stack-v1.0.0` release assets. The reviewed archive SHA-256 is `6e70e1911d5eac25028b71e9a72f54f55d4477c67a51a8fa16d5876d79d6146c`.
+
+**POSIX shell:**
 
 ```bash
+set -eu
+SKILLS_DIR="<your-agent-skills-directory>"
+TARGET="$SKILLS_DIR/lcfr-frontend-stack"
+test ! -e "$TARGET" || { echo "Refusing to replace $TARGET" >&2; exit 1; }
 curl -LO https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/lcfr-frontend-stack-1.0.0.zip
 curl -LO https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/lcfr-frontend-stack-1.0.0.zip.sha256
 sha256sum -c lcfr-frontend-stack-1.0.0.zip.sha256
-unzip lcfr-frontend-stack-1.0.0.zip -d <your-agent-skills-directory>
+STAGING="$(mktemp -d)"
+unzip -q lcfr-frontend-stack-1.0.0.zip -d "$STAGING"
+mv "$STAGING/lcfr-frontend-stack" "$TARGET"
 ```
 
-Use the user or project skills directory recognized by your Agent Skills-compatible client. The extracted directory is self-contained and starts at `lcfr-frontend-stack/SKILL.md`. Source, templates, provenance and deterministic packaging tests remain visible in this repository.
+**PowerShell:**
+
+```powershell
+$SkillsDir = "C:\path\to\your-agent-skills-directory"
+$Target = Join-Path $SkillsDir "lcfr-frontend-stack"
+if (Test-Path $Target) { throw "Refusing to replace $Target" }
+$Archive = "lcfr-frontend-stack-1.0.0.zip"
+$Expected = "6e70e1911d5eac25028b71e9a72f54f55d4477c67a51a8fa16d5876d79d6146c"
+Invoke-WebRequest "https://github.com/LCFR-D/aisthesis/releases/download/frontend-stack-v1.0.0/$Archive" -OutFile $Archive
+if ((Get-FileHash $Archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $Expected) {
+    throw "Archive checksum mismatch"
+}
+$Staging = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
+Expand-Archive $Archive -DestinationPath $Staging
+Move-Item (Join-Path $Staging "lcfr-frontend-stack") $Target
+```
+
+Use the user or project skills directory recognized by your Agent Skills-compatible client. The extracted directory is self-contained and starts at `lcfr-frontend-stack/SKILL.md`. The Python package and Agent Skill are separate installation artifacts. Source, templates, per-file provenance and deterministic packaging tests remain visible in this repository.
 
 Trigger it with a request such as: `Use lcfr-frontend-stack to take this interface from brief through a verified release.`
 

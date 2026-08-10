@@ -9,79 +9,97 @@ canonical_path = "skills/lcfr-frontend-stack"
 release_tag = "frontend-stack-v1.0.0"
 
 [distribution]
-third_party_skill_text_included = false
-private_product_evidence_included = false
-customer_data_included = false
-generated_assets_included = false
-artifact_builder = "python -m scripts.build_skill_release"
-validator = "python -m scripts.validate_skill"
+source_only = true
+archive_format = "zip"
+top_level_directory = "lcfr-frontend-stack"
+installer = "none"
+
+[generated]
+path = "manifest.json"
+sha256 = "26b36365253988e1dbbad0f065203b4d968ead96b20b67c340d2db1d5ac36afe"
+origin = "LCFR deterministic release builder"
+license = "MIT"
 
 [[files]]
 path = "LICENSE"
+sha256 = "7cab748d50d0ba70a4b9260ba449cf505c0e88743229c95760d715eba22ea181"
 origin = "LCFR original public skill licence"
 license = "MIT"
 
 [[files]]
 path = "SKILL.md"
+sha256 = "2f0741267e3c95018b60fd6c483234cc8193da2bf23a41d8e8e252e0dbbb28aa"
 origin = "LCFR original consolidated frontend operating system"
 license = "MIT"
 
 [[files]]
 path = "references/design-and-brand.md"
+sha256 = "9d660ec69259dbcd692b4db75f8c85d45a1452bbbad95854a4a9b3f45bff8fec"
 origin = "LCFR original brand-system and responsive-art method"
 license = "MIT"
 
 [[files]]
 path = "references/implementation-and-interaction.md"
+sha256 = "2c966f10a6895da0beb79ef3a9bd9c74c31b9c7d079b5bf8443cab47b90057f7"
 origin = "LCFR original frontend implementation and native-interaction method"
 license = "MIT"
 
 [[files]]
 path = "references/methodology.md"
+sha256 = "77a8e2ed2b88b99bfa68436a455a638f4f97c790e942026637fb015c704db1dc"
 origin = "LCFR original Metis governance and evidence method"
 license = "MIT"
 
 [[files]]
 path = "references/provenance.md"
+sha256 = "aa3996715e629df616e31837f013af5a4676bb8e8447e5fa6c66955d78291b57"
 origin = "LCFR original public provenance statement"
 license = "MIT"
 
 [[files]]
 path = "references/release-contract.md"
+sha256 = "21157046be5be68fd73abe0bb4ad36291124bf42f962cdab5d14db34dec5997a"
 origin = "LCFR original dogfood, performance, and release method"
 license = "MIT"
 
 [[files]]
 path = "references/responsive-and-accessibility.md"
+sha256 = "53b0e0400416e199b37ffeff5cef3f6e5f1c24f50889a99f26c3afe70d921b08"
 origin = "LCFR original responsive, state-completeness, and accessibility method"
 license = "MIT"
 
 [[files]]
 path = "references/skill-map.md"
+sha256 = "27c2fdf48ecf19d61caa196fce09bca5b8ec08d82d29225773cfb73d8c4e280f"
 origin = "LCFR original capability-composition map"
 license = "MIT"
 
 [[files]]
 path = "references/visual-evidence.md"
+sha256 = "02d81cdd24a37d36cb9995e2e19024d2ee63532203c5f986d3695cc3f85de930"
 origin = "LCFR original Kinetograph and Aisthesis evidence method"
 license = "MIT"
 
 [[files]]
 path = "templates/brief.md"
+sha256 = "acce4ca30543bce35e4fbddc26f9c9ada570ea29d2e303fd0672ba5088c5b5b8"
 origin = "LCFR original frontend brief template"
 license = "MIT"
 
 [[files]]
 path = "templates/release-evidence.md"
+sha256 = "592971480f59887a6bcecf607dcd1a50fa3bf5169c1c38f255126ac90d11fa81"
 origin = "LCFR original release evidence template"
 license = "MIT"
 
 [[files]]
 path = "templates/system-contract.md"
+sha256 = "1a4686d02d2b7313231e525bd644f59c4f944b4e18230f2e46297b1825585969"
 origin = "LCFR original frontend system contract template"
 license = "MIT"
 
 [[files]]
 path = "templates/verification-matrix.md"
+sha256 = "87f8c56e41eee3ea55a588322bdd1916fdd24d901a7b71435dbdaef2165f3ffa"
 origin = "LCFR original cross-engine verification matrix"
 license = "MIT"

@@ -14,6 +14,7 @@ from scripts.validate_skill import (
     REQUIRED_PATHS,
     capture_skill,
     parse_frontmatter,
+    portable_path_errors,
     validate_provenance,
     validate_skill,
     validate_snapshot,
@@ -106,11 +107,84 @@ def test_installed_manifest_detects_byte_drift(tmp_path: Path) -> None:
     assert any("manifest" in error for error in validate_skill(skill))
 
 
+def test_provenance_detects_source_byte_drift() -> None:
+    snapshot, capture_errors = capture_skill(DEFAULT_SKILL)
+    assert capture_errors == []
+    snapshot["LICENSE"] += b"drift"
+    assert any(
+        "provenance hash mismatch: LICENSE" in error
+        for error in validate_provenance(snapshot=snapshot)
+    )
+
+
 def test_malformed_frontmatter_fails_closed() -> None:
     snapshot, capture_errors = capture_skill(DEFAULT_SKILL)
     assert capture_errors == []
     snapshot["SKILL.md"] = b"---\nname: [invalid\n---\nbody\n"
     assert validate_snapshot(snapshot)
+
+
+def test_duplicate_frontmatter_keys_fail_closed() -> None:
+    snapshot, capture_errors = capture_skill(DEFAULT_SKILL)
+    assert capture_errors == []
+    text = snapshot["SKILL.md"].decode("utf-8")
+    snapshot["SKILL.md"] = text.replace(
+        "name: lcfr-frontend-stack", "name: lcfr-frontend-stack\nname: shadow"
+    ).encode("utf-8")
+    assert any("duplicate key" in error for error in validate_snapshot(snapshot))
+
+
+@pytest.mark.parametrize(
+    ("prefix", "replacement", "expected"),
+    [
+        (b"\xef\xbb\xbf", b"", "UTF-8 BOM"),
+        (b"", b"\r\n", "only LF line endings"),
+    ],
+)
+def test_noncanonical_text_encoding_fails_closed(
+    prefix: bytes, replacement: bytes, expected: str
+) -> None:
+    snapshot, capture_errors = capture_skill(DEFAULT_SKILL)
+    assert capture_errors == []
+    payload = snapshot["LICENSE"]
+    snapshot["LICENSE"] = prefix + (
+        payload.replace(b"\n", replacement) if replacement else payload
+    )
+    assert any(expected in error for error in validate_snapshot(snapshot))
+
+
+def test_nonportable_archive_paths_fail_closed() -> None:
+    errors = portable_path_errors(
+        {
+            "../escape.md",
+            "NUL.txt",
+            "references/Case.md",
+            "references/case.md",
+            "trailing-space ",
+            "drive:C.md",
+            "back\\slash.md",
+        }
+    )
+    assert len(errors) >= 6
+
+
+def test_clean_room_install_refuses_existing_target(tmp_path: Path) -> None:
+    archive, _ = build_release(tmp_path / "output")
+    staging = tmp_path / "staging"
+    with zipfile.ZipFile(archive) as bundle:
+        bundle.extractall(staging)
+    source = staging / "lcfr-frontend-stack"
+    target = tmp_path / "client" / "skills" / "lcfr-frontend-stack"
+    target.parent.mkdir(parents=True)
+    shutil.copytree(source, target)
+    sentinel = target / "user-content.txt"
+    sentinel.write_text("preserve me", encoding="utf-8")
+    with pytest.raises(FileExistsError):
+        shutil.copytree(source, target)
+    assert sentinel.read_text(encoding="utf-8") == "preserve me"
+    errors = validate_skill(target)
+    assert any("unexpected skill files" in error for error in errors)
+    assert any("manifest does not match" in error for error in errors)
 
 
 def test_output_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
@@ -123,6 +197,18 @@ def test_output_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
         pytest.skip("directory symlinks are unavailable on this runner")
     with pytest.raises(ValueError, match="link or junction"):
         build_release(linked_output)
+
+
+def test_skill_root_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
+    source = copy_skill(tmp_path / "source")
+    linked = tmp_path / "linked"
+    try:
+        linked.symlink_to(source, target_is_directory=True)
+    except OSError:
+        pytest.skip("directory symlinks are unavailable on this runner")
+    assert any(
+        "skill root is a link or junction" in error for error in validate_skill(linked)
+    )
 
 
 def test_public_skill_contains_no_private_paths_or_secret_tokens() -> None:

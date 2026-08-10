@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import json
 import os
 import zipfile
 from pathlib import Path
@@ -12,6 +11,7 @@ from scripts.validate_skill import (
     REPO_ROOT,
     REQUIRED_PATHS,
     capture_skill,
+    manifest_bytes,
     parse_frontmatter,
     validate_provenance,
     validate_snapshot,
@@ -44,7 +44,7 @@ def build_release(
     snapshot, capture_errors = capture_skill(skill_root)
     errors = capture_errors + validate_snapshot(snapshot)
     if skill_root.resolve() == DEFAULT_SKILL.resolve():
-        errors.extend(validate_provenance())
+        errors.extend(validate_provenance(snapshot=snapshot))
     if errors:
         raise ValueError("invalid skill:\n" + "\n".join(errors))
     if set(snapshot) != REQUIRED_PATHS:
@@ -57,23 +57,7 @@ def build_release(
     ordered = tuple(
         (relative, snapshot[relative]) for relative in sorted(REQUIRED_PATHS)
     )
-    manifest = {
-        "schemaVersion": 1,
-        "name": name,
-        "version": version,
-        "license": metadata["license"],
-        "files": [
-            {
-                "path": relative,
-                "bytes": len(payload),
-                "sha256": hashlib.sha256(payload).hexdigest(),
-            }
-            for relative, payload in ordered
-        ],
-    }
-    manifest_bytes = (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode(
-        "utf-8"
-    )
+    manifest_payload = manifest_bytes(snapshot)
 
     output_dir = Path(os.path.abspath(output_dir))
     _validate_output_path(output_dir)
@@ -103,7 +87,7 @@ def build_release(
         info.create_system = 3
         bundle.writestr(
             info,
-            manifest_bytes,
+            manifest_payload,
             compress_type=zipfile.ZIP_DEFLATED,
             compresslevel=9,
         )
