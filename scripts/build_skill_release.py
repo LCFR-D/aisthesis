@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import os
+import sys
 import zipfile
 from pathlib import Path
 
@@ -101,7 +102,11 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=REPO_ROOT / "dist")
     parser.add_argument("--skill", type=Path, default=DEFAULT_SKILL)
     args = parser.parse_args()
-    archive, checksum = build_release(args.output, args.skill)
+    try:
+        archive, checksum = build_release(args.output, args.skill)
+    except (FileExistsError, OSError, ValueError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     print(archive)
     print(checksum)
     print(file_sha256(archive))

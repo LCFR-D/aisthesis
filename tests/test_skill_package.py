@@ -327,6 +327,7 @@ def test_cli_rejects_skill_under_linked_parent(tmp_path: Path) -> None:
     )
     assert result.returncode != 0
     assert "source path traverses a link or junction" in result.stderr
+    assert "Traceback" not in result.stderr
 
 
 @pytest.mark.skipif(os.name != "nt", reason="Windows junction test")
