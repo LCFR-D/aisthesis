@@ -101,7 +101,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=REPO_ROOT / "dist")
     parser.add_argument("--skill", type=Path, default=DEFAULT_SKILL)
     args = parser.parse_args()
-    archive, checksum = build_release(args.output, args.skill.resolve())
+    archive, checksum = build_release(args.output, args.skill)
     print(archive)
     print(checksum)
     print(file_sha256(archive))

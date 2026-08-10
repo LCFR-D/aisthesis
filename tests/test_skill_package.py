@@ -5,6 +5,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import zipfile
 from pathlib import Path
 
@@ -288,6 +289,44 @@ def test_skill_under_linked_parent_is_rejected(tmp_path: Path) -> None:
             pytest.skip("directory symlinks are unavailable on this runner")
     with pytest.raises(ValueError, match="source path traverses a link or junction"):
         build_release(tmp_path / "output", linked_parent / "candidate")
+
+
+def test_cli_rejects_skill_under_linked_parent(tmp_path: Path) -> None:
+    real_parent = tmp_path / "real-parent"
+    real_parent.mkdir()
+    copy_skill(real_parent / "candidate")
+    linked_parent = tmp_path / "linked-parent"
+    if os.name == "nt":
+        junction = subprocess.run(
+            ["cmd.exe", "/c", "mklink", "/J", str(linked_parent), str(real_parent)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if junction.returncode != 0:
+            pytest.skip(f"junction creation unavailable: {junction.stderr}")
+    else:
+        try:
+            linked_parent.symlink_to(real_parent, target_is_directory=True)
+        except OSError:
+            pytest.skip("directory symlinks are unavailable on this runner")
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.build_skill_release",
+            "--skill",
+            str(linked_parent / "candidate"),
+            "--output",
+            str(tmp_path / "output"),
+        ],
+        cwd=DEFAULT_SKILL.parents[1],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+    assert "source path traverses a link or junction" in result.stderr
 
 
 @pytest.mark.skipif(os.name != "nt", reason="Windows junction test")
