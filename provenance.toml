@@ -16,7 +16,7 @@ installer = "none"
 
 [generated]
 path = "manifest.json"
-sha256 = "7c99e6be3b2075bb2b4144e166d31fc3b4638842d8a96301e4c9215c96f458a8"
+sha256 = "b4bdbb7549ac48d6a7d5f62e36ca2baa1af2b2a677e73b6bc97c78c4ca8cec68"
 origin = "LCFR deterministic release builder"
 license = "MIT"
 
@@ -28,13 +28,13 @@ license = "MIT"
 
 [[files]]
 path = "SKILL.md"
-sha256 = "bcc888e0aa9fe22d825ee11b2e2c2d2a1009629810aeb623a4852c271166e139"
+sha256 = "23a00b571b14410e7bfc2c9e63c19aadcc64f3083f56b1b52377896bdde10611"
 origin = "LCFR original complete Aisthesis frontend operating system"
 license = "MIT"
 
 [[files]]
 path = "references/capability-map.md"
-sha256 = "8d11ef115079687679868bf518d4ae3371381163f92e6533153a63715bfdbfaf"
+sha256 = "ee5fd88e4b8d88bffb7a0cf22058077f9421a5a1bfb62b7b25ee02be7230f1be"
 origin = "LCFR original provenance-safe capability composition map"
 license = "MIT"
 
@@ -51,6 +51,12 @@ origin = "LCFR original Aisthesis frontend method"
 license = "MIT"
 
 [[files]]
+path = "references/external-capability-ledger.md"
+sha256 = "1e40e5cbd1c4c55e7fba1f8f460092268e5d06850fe8263e6a714afec92d32ac"
+origin = "LCFR original clean-room capability and provenance ledger"
+license = "MIT"
+
+[[files]]
 path = "references/implementation-and-interaction.md"
 sha256 = "92ea35665421eab71e6486bb6c759bdbe85631e2207d1659b823f79c3588fcc1"
 origin = "LCFR original Aisthesis frontend method"
@@ -60,6 +66,12 @@ license = "MIT"
 path = "references/methodology.md"
 sha256 = "77a8e2ed2b88b99bfa68436a455a638f4f97c790e942026637fb015c704db1dc"
 origin = "LCFR original Metis governance and evidence method"
+license = "MIT"
+
+[[files]]
+path = "references/pattern-and-stack-intelligence.md"
+sha256 = "65c200930a7c9046abd7ccefd3d9bf6b9ada6da0a769ef75a07f53927051483e"
+origin = "LCFR original Aisthesis frontend method"
 license = "MIT"
 
 [[files]]
@@ -76,13 +88,19 @@ license = "MIT"
 
 [[files]]
 path = "references/release-contract.md"
-sha256 = "9eb1713e2fde989ac48adb1f7a2424819c3973fc91021af28c77fd937e5b4999"
+sha256 = "2ed5868016a7dcee3114b737344a9ed031b68d954c30ec3510794c2669896a6d"
+origin = "LCFR original Aisthesis frontend method"
+license = "MIT"
+
+[[files]]
+path = "references/repeatable-animation-systems.md"
+sha256 = "1ba46342e12b7cf4d0575c2948e1db1b686d0704d0c9dfb12fe7823104256e21"
 origin = "LCFR original Aisthesis frontend method"
 license = "MIT"
 
 [[files]]
 path = "references/responsive-and-accessibility.md"
-sha256 = "53b0e0400416e199b37ffeff5cef3f6e5f1c24f50889a99f26c3afe70d921b08"
+sha256 = "689a311ec122ea112d687e7b616cfabb21ab231a6fe683619f1272cb8b12bff8"
 origin = "LCFR original Aisthesis frontend method"
 license = "MIT"
 
@@ -93,9 +111,21 @@ origin = "LCFR original Aisthesis frontend method"
 license = "MIT"
 
 [[files]]
+path = "references/typography-and-copy.md"
+sha256 = "ed7dd5adfea9887f0d8d488b4633bcc1eb692acc1af91736563dd9bf5a98e60a"
+origin = "LCFR original Aisthesis frontend method"
+license = "MIT"
+
+[[files]]
 path = "references/visual-evidence.md"
-sha256 = "02d81cdd24a37d36cb9995e2e19024d2ee63532203c5f986d3695cc3f85de930"
+sha256 = "139053ce4dc9736791a2980763f38b937d2d6f23b7f2ccd0ca0ff3b753d21e5f"
 origin = "LCFR original Kinetograph and Aisthesis Judgment evidence method"
+license = "MIT"
+
+[[files]]
+path = "templates/accessibility-audit.md"
+sha256 = "da5a98000894fbb51aa3c849f4196b0c74bba79324eb351c114792a9bd0cac25"
+origin = "LCFR original Aisthesis workflow template"
 license = "MIT"
 
 [[files]]
@@ -117,8 +147,26 @@ origin = "LCFR original Aisthesis workflow template"
 license = "MIT"
 
 [[files]]
+path = "templates/design-system.yaml"
+sha256 = "1e1b90b56c48aabf3d7a14c8cccc6978a96a27f2bee92088d16c31d3249008a8"
+origin = "LCFR original Aisthesis workflow template"
+license = "MIT"
+
+[[files]]
 path = "templates/experience-architecture.md"
 sha256 = "9b9aee97d0d49980694e6ee9b9e3b1e829d9ccaf0911fb4dad5097f2b72d5f4c"
+origin = "LCFR original Aisthesis workflow template"
+license = "MIT"
+
+[[files]]
+path = "templates/issue-ledger.md"
+sha256 = "9bab71d5e59a65ab83482e91250c869b0d8d3f0491369ff72ba9804180e6f253"
+origin = "LCFR original Aisthesis workflow template"
+license = "MIT"
+
+[[files]]
+path = "templates/motion-contract.yaml"
+sha256 = "49d931e50c8c78a69dbc2bef43829bfe33f67dc96a6518f4a201ecac3d9f7f3e"
 origin = "LCFR original Aisthesis workflow template"
 license = "MIT"
 

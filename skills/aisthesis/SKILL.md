@@ -55,8 +55,8 @@ Choose the smallest route that owns the work:
 
 | Request | Route | Required reference |
 |---|---|---|
-| New page, app, flow, or component | **Build** | `direction-and-taste.md`, then applicable implementation references |
-| Plan UX/UI before code | **Shape** | `methodology.md`, `systems-and-product-ui.md` |
+| New page, app, flow, or component | **Build** | `direction-and-taste.md`, `pattern-and-stack-intelligence.md`, then applicable implementation references |
+| Plan UX/UI before code | **Shape** | `methodology.md`, `systems-and-product-ui.md`, `typography-and-copy.md` |
 | Improve an existing surface | **Refine** | incumbent capture, then the narrow owning reference |
 | Replace the visual or interaction world | **Redesign** | `direction-and-taste.md`; preserve product truth and route contracts |
 | Diagnose without editing | **Audit** | `visual-evidence.md`, `release-contract.md` |
@@ -65,9 +65,9 @@ Choose the smallest route that owns the work:
 | Final fit-and-finish | **Polish** | `direction-and-taste.md`, `implementation-and-interaction.md` |
 | Errors, edge cases, i18n, recovery | **Harden** | `systems-and-product-ui.md`, `responsive-and-accessibility.md` |
 | Responsive correction | **Adapt** | `responsive-and-accessibility.md` |
-| Motion or scroll narrative | **Animate** | `implementation-and-interaction.md`, `visual-evidence.md` |
+| Motion or scroll narrative | **Animate** | `implementation-and-interaction.md`, `repeatable-animation-systems.md`, `visual-evidence.md` |
 | Performance work | **Optimize** | `release-contract.md` |
-| Extract tokens/components | **Extract** | `design-and-brand.md`, `systems-and-product-ui.md` |
+| Extract tokens/components | **Extract** | `design-and-brand.md`, `systems-and-product-ui.md`, `templates/design-system.yaml` |
 | Ship | **Release** | `release-contract.md` and all required evidence |
 
 Do not run every lens on every task. The bundle is complete because the right capability is locally available, not because every capability fires at once.
@@ -94,7 +94,7 @@ For existing work, run the current build and tests before editing. Capture repre
 
 ### 3. Choose direction with Taste
 
-Read `references/direction-and-taste.md` and `references/design-and-brand.md`.
+Read `references/direction-and-taste.md`, `references/design-and-brand.md`, and `references/typography-and-copy.md`. For a new or structurally weak surface, also query `references/pattern-and-stack-intelligence.md` by surface, structure and host stack.
 
 Infer the surface mode: **Persuade**, **Operate**, **Read**, or **Experience**. Define:
 
@@ -111,7 +111,7 @@ Do not default to a fashionable visual family. Do not replace an approved identi
 
 ### 4. Define the system and complete states
 
-Read `references/systems-and-product-ui.md` and complete `templates/system-contract.md`.
+Read `references/systems-and-product-ui.md` and complete `templates/system-contract.md`. For reusable systems, also complete `templates/design-system.yaml`; keep token references acyclic and validate required contrast pairs.
 
 Define semantic tokens, containers, type roles, action hierarchy, component ownership, data density, interaction grammar, motion grammar, and responsive transformations. Model every applicable state: loading, skeleton, empty, partial, stale, offline, unauthorized, error, success, hover, focus, active, disabled, selected, pending, destructive confirmation, undo, and recovery.
 
@@ -122,6 +122,8 @@ Use the incumbent stack unless change is justified. Verify dependencies before i
 Map requirements to files, components, assets, tests, and rollback. Add executable assertions before claiming behavior. Build foundations before responsive behavior, interaction, motion, and polish. For risky interactions, prove a thin tracer path before broad implementation.
 
 Read `references/implementation-and-interaction.md` before changing scrolling, motion, state ownership, focus, gestures, or component architecture.
+
+For recurring scenes, characters, camera systems, generated animation or multi-run production, read `references/repeatable-animation-systems.md` and complete `templates/motion-contract.yaml`.
 
 ### 6. Integrate visual systems and assets
 
@@ -140,7 +142,7 @@ Never regenerate approved art before proving whether the defect belongs to sourc
 
 Read `references/responsive-and-accessibility.md`. Exercise the required matrix, including narrow, mobile, intermediate, desktop, and wide states where relevant. Test keyboard, focus order, screen-reader semantics, touch targets, zoom, contrast, forced colors where relevant, reduced motion, dark/light themes, localization expansion, and horizontal overflow.
 
-Complete `templates/verification-matrix.md`.
+Complete `templates/verification-matrix.md` and `templates/accessibility-audit.md` for material or public work.
 
 ### 8. Capture with Kinetograph
 
@@ -163,6 +165,8 @@ Every finding cites profile, frame or state, region, confidence, visible observa
 ### 10. Dogfood, optimize, and review
 
 Exercise primary journeys as a visitor, including keyboard, touch, refresh, deep-link, back/forward, failure, and recovery. Measure loading and runtime separately. Review security, privacy, accessibility, maintainability, dependency risk, content integrity, and regression scope.
+
+Use the severity and reproduction contract in `references/release-contract.md`; record findings in `templates/issue-ledger.md`. A clean initial render is not a dogfood pass: inspect console, network, focus and state after meaningful interactions.
 
 Protect visual fidelity while optimizing. A faster but visibly degraded or less usable interface is not a passing optimization.
 
@@ -197,7 +201,7 @@ Use one batched audit, one consolidated fix pass, and one confirmation pass. Do 
 
 ## Capability map
 
-`references/capability-map.md` records every absorbed capability family, including Impeccable, Taste, Hallmark, Frontend Design, UI/UX pattern intelligence, Emil-style interaction craft, Metis, Kinetograph, Aisthesis Judgment, brand systems, responsive art, accessibility, performance, dogfooding, and release review. It is a provenance map, not a runtime dependency list.
+`references/capability-map.md` records the operating layers. `references/external-capability-ledger.md` records every reviewed method, observed provenance, capability absorbed, and clean-room reuse decision. They are provenance maps, not runtime dependency lists.
 
 ## Completion checklist
 

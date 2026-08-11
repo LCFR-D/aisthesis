@@ -16,13 +16,15 @@ Aisthesis combines:
 
 It absorbs the functional coverage of LCFR's full frontend stack, including Impeccable, Taste, Hallmark, Frontend Design, UI/UX pattern intelligence, interaction craft, brand-system development, responsive generated art, scrolltelling QA, performance, dogfooding, and code review. The public instructions are independently written and provenance-safe. No separately installed design skill is required.
 
+The extracted skill is standalone procedural guidance with its own templates and schemas. It adapts to the host project's existing browser, accessibility, performance, and build tools; the repository's Python judgment toolkit and external CLIs are optional accelerators, not runtime requirements.
+
 ## Agent Skill
 
 The canonical standalone skill is [`skills/aisthesis`](skills/aisthesis/SKILL.md). It supports Build, Shape, Refine, Redesign, Audit, Study, Prototype, Polish, Harden, Adapt, Animate, Optimize, Extract, and Release routes across marketing sites, product interfaces, dashboards, documentation, portfolios, design systems, components, motion, and scroll narratives.
 
 ### Install the skill
 
-Download the immutable `aisthesis-v1.0.0` release assets. The reviewed archive SHA-256 is `f4769cc4fb6ab24f70ddf99ff6d613b18e539e144a19d15b81e4fa8e1866d6d0`.
+Download the immutable `aisthesis-v1.0.0` release assets. The reviewed archive SHA-256 is `a0234d2027cb7585c47b35e6465ba36c7e0dd8a19385bec5af8c991a71cb5775`.
 
 **POSIX shell:**
 
@@ -30,12 +32,41 @@ Download the immutable `aisthesis-v1.0.0` release assets. The reviewed archive S
 set -eu
 SKILLS_DIR="<your-agent-skills-directory>"
 TARGET="$SKILLS_DIR/aisthesis"
-test ! -e "$TARGET" || { echo "Refusing to replace $TARGET" >&2; exit 1; }
+assert_no_link_ancestor() {
+  candidate=$1
+  while :; do
+    if [ -L "$candidate" ]; then
+      echo "Refusing destination through link or junction: $candidate" >&2
+      exit 1
+    fi
+    if command -v fsutil.exe >/dev/null 2>&1 && command -v cygpath >/dev/null 2>&1; then
+      if fsutil.exe reparsepoint query "$(cygpath -w "$candidate")" >/dev/null 2>&1; then
+        echo "Refusing destination through link or junction: $candidate" >&2
+        exit 1
+      fi
+    fi
+    parent=$(dirname -- "$candidate")
+    [ "$parent" != "$candidate" ] || break
+    candidate=$parent
+  done
+}
+assert_no_link_ancestor "$TARGET"
+if [ -e "$TARGET" ] || [ -L "$TARGET" ]; then
+  echo "Refusing to replace $TARGET" >&2
+  exit 1
+fi
 curl -LO https://github.com/LCFR-D/aisthesis/releases/download/aisthesis-v1.0.0/aisthesis-1.0.0.zip
 curl -LO https://github.com/LCFR-D/aisthesis/releases/download/aisthesis-v1.0.0/aisthesis-1.0.0.zip.sha256
 sha256sum -c aisthesis-1.0.0.zip.sha256
 STAGING="$(mktemp -d)"
+trap 'rm -rf "$STAGING"' EXIT HUP INT TERM
 unzip -q aisthesis-1.0.0.zip -d "$STAGING"
+assert_no_link_ancestor "$TARGET"
+[ ! -e "$TARGET" ] && [ ! -L "$TARGET" ] || {
+  echo "Refusing to replace $TARGET" >&2
+  exit 1
+}
+mkdir -p "$SKILLS_DIR"
 mv "$STAGING/aisthesis" "$TARGET"
 ```
 
@@ -44,16 +75,40 @@ mv "$STAGING/aisthesis" "$TARGET"
 ```powershell
 $SkillsDir = "C:\path\to\your-agent-skills-directory"
 $Target = Join-Path $SkillsDir "aisthesis"
-if (Test-Path -LiteralPath $Target) { throw "Refusing to replace $Target" }
+function Assert-NoReparseAncestor {
+    param([Parameter(Mandatory)][string]$Path)
+    $Current = [System.IO.Path]::GetFullPath($Path)
+    while ($true) {
+        $Item = Get-Item -LiteralPath $Current -Force -ErrorAction SilentlyContinue
+        if ($null -ne $Item) {
+            if (($Item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+                throw "Refusing destination through link or junction: $Current"
+            }
+        }
+        $Parent = [System.IO.Directory]::GetParent($Current)
+        if ($null -eq $Parent) { break }
+        $Current = $Parent.FullName
+    }
+}
+Assert-NoReparseAncestor -Path $Target
+if ($null -ne (Get-Item -LiteralPath $Target -Force -ErrorAction SilentlyContinue)) {
+    throw "Refusing to replace $Target"
+}
 $Archive = "aisthesis-1.0.0.zip"
-$Expected = "f4769cc4fb6ab24f70ddf99ff6d613b18e539e144a19d15b81e4fa8e1866d6d0"
+$Expected = "a0234d2027cb7585c47b35e6465ba36c7e0dd8a19385bec5af8c991a71cb5775"
 Invoke-WebRequest "https://github.com/LCFR-D/aisthesis/releases/download/aisthesis-v1.0.0/$Archive" -OutFile $Archive
 if ((Get-FileHash $Archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $Expected) {
     throw "Archive checksum mismatch"
 }
 $Staging = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
 Expand-Archive -LiteralPath $Archive -DestinationPath $Staging
+Assert-NoReparseAncestor -Path $Target
+if ($null -ne (Get-Item -LiteralPath $Target -Force -ErrorAction SilentlyContinue)) {
+    throw "Refusing to replace $Target"
+}
+New-Item -ItemType Directory -Path $SkillsDir -Force | Out-Null
 Move-Item -LiteralPath (Join-Path $Staging "aisthesis") -Destination $Target
+Remove-Item -LiteralPath $Staging -Recurse -Force
 ```
 
 Use the user or project skills directory recognized by your Agent Skills-compatible client. The extracted directory is self-contained and starts at `aisthesis/SKILL.md`.

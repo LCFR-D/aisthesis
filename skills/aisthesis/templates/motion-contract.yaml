@@ -1,0 +1,50 @@
+schema: lcfr.motion-contract/v1
+identity:
+  name: ""
+  candidate_revision: ""
+  coordinate_system: ""
+subjects:
+  - id: ""
+    source: ""
+    licence_or_rights: ""
+    protected_features: []
+    permitted_variants: []
+rig:
+  parts: []
+  pivots: {}
+  constraints: []
+scene:
+  logical_size: { width: 0, height: 0 }
+  safe_regions: []
+  depth_planes: []
+camera:
+  framing: ""
+  movement_axes: []
+  zoom_limits: []
+states:
+  - id: ""
+    entry: ""
+    active: ""
+    exit: ""
+    interrupt: ""
+    reverse: ""
+    reduced_motion: ""
+timeline:
+  - id: ""
+    start_ms: 0
+    duration_ms: 0
+    easing: ""
+    checkpoint: ""
+responsive:
+  profiles: []
+  protected_regions: []
+  static_fallback: ""
+evidence:
+  double_render: true
+  required_checkpoints: []
+  tolerated_nondeterminism: []
+  browser_and_renderer_versions: []
+performance:
+  device_pixel_ratio_cap: 0
+  offscreen_policy: "pause"
+  hidden_document_policy: "pause"

@@ -1,0 +1,50 @@
+schema: lcfr.design-system/v1
+identity:
+  name: ""
+  product_truth: ""
+  surface_mode: ""
+  source_references: []
+tokens:
+  color:
+    background: { value: "", role: "canvas", contrast_against: [] }
+    foreground: { value: "", role: "text", contrast_against: [background] }
+    accent: { value: "", role: "action", contrast_against: [background] }
+    critical: { value: "", role: "destructive", contrast_against: [background] }
+  typography:
+    display: { family: "", fallback: "", min_px: 0, max_px: 0, line_height: 0 }
+    body: { family: "", fallback: "", min_px: 0, max_px: 0, line_height: 0 }
+    mono: { family: "", fallback: "", min_px: 0, max_px: 0, line_height: 0 }
+  space:
+    unit_px: 0
+    scale: []
+  radius: {}
+  border: {}
+  shadow: {}
+  motion:
+    instant_ms: 0
+    feedback_ms: 0
+    transition_ms: 0
+    easing_enter: ""
+    easing_exit: ""
+    reduced_motion: ""
+components:
+  - name: ""
+    semantic_element: ""
+    variants: []
+    sizes: []
+    states: [default, hover, focus, active, disabled, loading, error]
+    keyboard_contract: ""
+    accessible_name_contract: ""
+    responsive_behavior: ""
+    performance_budget: ""
+    prohibited_overrides: []
+validation:
+  wcag_target: "2.2 AA"
+  required_themes: []
+  required_profiles: []
+  token_contrast_pairs: []
+  unresolved_exceptions: []
+exports:
+  css_variables: ""
+  json_tokens: ""
+  utility_config: ""

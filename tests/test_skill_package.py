@@ -73,6 +73,12 @@ def test_release_archive_is_reproducible_and_self_contained(tmp_path: Path) -> N
     assert validate_skill(extracted / "aisthesis") == []
 
 
+def test_readme_checksum_matches_release_bytes(tmp_path: Path) -> None:
+    archive, _ = build_release(tmp_path / "release")
+    readme = (DEFAULT_SKILL.parent.parent / "README.md").read_text(encoding="utf-8")
+    assert sha256(archive) in readme
+
+
 @pytest.mark.parametrize("relative", sorted(REQUIRED_PATHS))
 def test_every_release_file_is_independently_required(
     tmp_path: Path, relative: str
@@ -218,6 +224,147 @@ def test_clean_room_install_refuses_existing_target(tmp_path: Path) -> None:
     errors = validate_skill(target)
     assert any("unexpected skill files" in error for error in errors)
     assert any("manifest does not match" in error for error in errors)
+
+
+def test_readme_install_recipes_guard_linked_parents_before_move() -> None:
+    readme = (DEFAULT_SKILL.parent.parent / "README.md").read_text(encoding="utf-8")
+    posix_guard = 'assert_no_link_ancestor "$TARGET"'
+    posix_move = 'mv "$STAGING/aisthesis" "$TARGET"'
+    powershell_guard = "Assert-NoReparseAncestor -Path $Target"
+    powershell_move = (
+        'Move-Item -LiteralPath (Join-Path $Staging "aisthesis") -Destination $Target'
+    )
+    assert posix_guard in readme
+    assert powershell_guard in readme
+    assert readme.index(posix_guard) < readme.index(posix_move)
+    assert readme.index(powershell_guard) < readme.index(powershell_move)
+
+
+def test_public_capability_ledger_covers_every_absorbed_method() -> None:
+    ledger = (DEFAULT_SKILL / "references" / "external-capability-ledger.md").read_text(
+        encoding="utf-8"
+    )
+    for method in (
+        "Impeccable",
+        "Taste",
+        "Metis",
+        "UI UX Pro Max",
+        "Emil",
+        "Frontend Design",
+        "Hallmark",
+        "Popular Web Designs",
+        "Aisthesis Judgment",
+        "Kinetograph",
+        "Scrolltelling QA",
+        "Responsive Generated Brand Art",
+        "Brand System Development",
+        "Consistent Animation Systems",
+        "Performance",
+        "Dogfood",
+        "Requesting Code Review",
+        "Claude Design",
+        "Design MD",
+        "Sketch",
+        "Public Release Integrity",
+        "Pretext",
+        "p5.js",
+    ):
+        assert method in ledger
+
+
+def _make_directory_link(link: Path, target: Path) -> None:
+    if os.name == "nt":
+        result = subprocess.run(
+            ["cmd.exe", "/c", "mklink", "/J", str(link), str(target)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            pytest.skip(f"junction creation unavailable: {result.stderr}")
+    else:
+        try:
+            link.symlink_to(target, target_is_directory=True)
+        except OSError:
+            pytest.skip("directory symlinks are unavailable on this runner")
+
+
+def test_documented_posix_guard_rejects_linked_parent(tmp_path: Path) -> None:
+    bash = shutil.which("bash")
+    if bash is None:
+        pytest.skip("bash unavailable")
+    external = tmp_path / "external"
+    external.mkdir()
+    linked = tmp_path / "skills"
+    _make_directory_link(linked, external)
+    target = linked / "aisthesis"
+    script = r"""
+assert_no_link_ancestor() {
+  candidate=$1
+  while :; do
+    if [ -L "$candidate" ]; then exit 41; fi
+    if command -v fsutil.exe >/dev/null 2>&1 && command -v cygpath >/dev/null 2>&1; then
+      if fsutil.exe reparsepoint query "$(cygpath -w "$candidate")" >/dev/null 2>&1; then exit 41; fi
+    fi
+    parent=$(dirname -- "$candidate")
+    [ "$parent" != "$candidate" ] || break
+    candidate=$parent
+  done
+}
+assert_no_link_ancestor "$1"
+mkdir "$1"
+"""
+    result = subprocess.run(
+        [bash, "-c", script, "guard", str(target)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 41
+    assert not (external / "aisthesis").exists()
+
+
+@pytest.mark.skipif(os.name != "nt", reason="PowerShell reparse-point test")
+def test_documented_powershell_guard_rejects_linked_parent(tmp_path: Path) -> None:
+    powershell = shutil.which("powershell.exe") or shutil.which("powershell")
+    if powershell is None:
+        pytest.skip("Windows PowerShell unavailable")
+    external = tmp_path / "external"
+    external.mkdir()
+    linked = tmp_path / "skills"
+    _make_directory_link(linked, external)
+    target = linked / "aisthesis"
+    script = r"""
+param([string]$Target)
+function Assert-NoReparseAncestor {
+    param([Parameter(Mandatory)][string]$Path)
+    $Current = [System.IO.Path]::GetFullPath($Path)
+    while ($true) {
+        $Item = Get-Item -LiteralPath $Current -Force -ErrorAction SilentlyContinue
+        if ($null -ne $Item) {
+            if (($Item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+                throw "Refusing destination through link or junction: $Current"
+            }
+        }
+        $Parent = [System.IO.Directory]::GetParent($Current)
+        if ($null -eq $Parent) { break }
+        $Current = $Parent.FullName
+    }
+}
+Assert-NoReparseAncestor -Path $Target
+New-Item -ItemType Directory -Path $Target | Out-Null
+"""
+    probe = tmp_path / "guard.ps1"
+    probe.write_text(script, encoding="utf-8")
+    result = subprocess.run(
+        [powershell, "-NoProfile", "-File", str(probe), "-Target", str(target)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+    assert "link or junction" in result.stderr
+    assert not (external / "aisthesis").exists()
 
 
 def test_output_symlink_is_rejected_when_supported(tmp_path: Path) -> None:
