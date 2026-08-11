@@ -18,7 +18,7 @@ For authored progress, include named keyframes in the sample grid rather than re
 
 ## Execution adapters
 
-Aisthesis does not assume a separately installed private skill or CLI. Implement the capture contract with the host project's pinned browser tooling. A minimal Playwright-compatible sequence is:
+Aisthesis does not assume a separately installed private skill or CLI. Implement the capture contract with the host project's pinned browser tooling. The bundle includes `../scripts/playwright-evidence.mjs` for baseline Chromium/Firefox capture; read `tool-orchestration.md` before extending it. A minimal Playwright-compatible sequence is:
 
 1. launch each required engine with an explicit viewport, DPR, color scheme, locale and reduced-motion value;
 2. attach page-error, console, response and request-failure listeners before navigation;
@@ -34,7 +34,7 @@ The repository's public Python toolkit can inspect saved frames and pacing plans
 
 ```bash
 aisthesis inspect frame.png --output findings.json
-aisthesis pacing --plan phase-plan.json --output pacing.json
+aisthesis pace --travel 3420 --viewport-height 900 --start 0.25 --end 0.70 --output pacing.json
 ```
 
 Use equivalent project-native tools when the Python toolkit is unavailable. The evidence schema and acceptance boundary remain the same.

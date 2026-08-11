@@ -14,6 +14,7 @@ Aisthesis was independently authored by LCFR after reviewing the capability fami
 | Popular Web Designs | Hermes/Teknium MIT skill derived from a branded pattern collection | Pattern vocabulary | No branded templates copied; Aisthesis uses neutral archetypes |
 | Aisthesis Judgment | LCFR method; repository MIT | Separated deterministic, model and human visual evidence | Newly authored LCFR public edition |
 | Kinetograph | LCFR MIT project | Exact progress, dense frames, pacing and physical input evidence | Method and command interface absorbed; no separate runtime required by the skill |
+| Playwright | Microsoft open-source browser automation, Apache-2.0 | Cross-engine navigation, native input, screenshots, console/network evidence, and project-owned journeys | Original LCFR adapter resolves the host project's pinned package; no Playwright code or browser binary bundled |
 | Scrolltelling QA | Local skill without explicit licence metadata | Beat matrices, wheel testing and reduced-motion parity | Independently synthesized |
 | Responsive Generated Brand Art | Local LCFR method without explicit licence metadata | Source-locked responsive art families and protected regions | Independently synthesized; private case material excluded |
 | Brand System Development | Local LCFR method without explicit licence metadata | Source fidelity, vectors, layers, tokens and proof sheets | Independently synthesized; private artifacts excluded |
@@ -30,8 +31,8 @@ Aisthesis was independently authored by LCFR after reviewing the capability fami
 
 ## Primary public standards
 
-Accessibility guidance is derived from WCAG 2.2, WAI-ARIA Authoring Practices, HTML, CSS and browser accessibility APIs. Performance guidance is derived from Core Web Vitals and browser performance tooling. Browser evidence uses tool-neutral Playwright-compatible concepts. Aisthesis does not redistribute those specifications.
+Accessibility guidance is derived from WCAG 2.2, WAI-ARIA Authoring Practices, HTML, CSS and browser accessibility APIs. Performance guidance is derived from Core Web Vitals and browser performance tooling. Browser evidence uses tool-neutral concepts plus an original adapter that resolves a host project's separately installed Playwright package. Aisthesis does not redistribute those specifications, Playwright, or browser binaries.
 
 ## Distribution statement
 
-The release archive contains only LCFR-authored instructions, templates and the MIT licence. Product names above are provenance labels, not bundled dependencies or endorsements. External CLIs and libraries remain optional execution tools. The installed skill remains useful without them by requiring observable states, commands appropriate to the host project, and human-controlled acceptance.
+The release archive contains only LCFR-authored instructions, templates, scripts and the MIT licence. Product names above are provenance labels, not bundled dependencies or endorsements. External CLIs and libraries remain optional execution tools. The installed skill remains useful without them by requiring observable states, commands appropriate to the host project, and human-controlled acceptance.

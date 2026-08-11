@@ -7,5 +7,7 @@
 - Absorbed the functional coverage of Impeccable, Taste, Hallmark, Frontend Design, UI/UX pattern intelligence, interaction craft, popular web-pattern study, and LCFR's specialist frontend methods through independently written, provenance-safe instructions.
 - Added routes for Build, Shape, Refine, Redesign, Audit, Study, Prototype, Polish, Harden, Adapt, Animate, Optimize, Extract, and Release.
 - Added eleven reusable templates, a neutral pattern/stack catalog, WCAG 2.2 AA audit method, repeatable-animation contracts, typography/copy guidance, performance budgets, exploratory defect protocol, and a source-by-source clean-room capability ledger.
+- Added a portable Playwright evidence adapter that resolves the host project's pinned runtime, captures Chromium and Firefox profiles, records browser failures and geometry, refuses overwrite, and emits machine-readable evidence; added verified routing for host tools and custom functions.
+- Replaced toolkit tracebacks for missing images and unwritable outputs with controlled CLI diagnostics.
 - Added lexical no-follow installation guards for POSIX and PowerShell, explicit provenance, deterministic archive generation, checksums, clean-room archive validation, and Linux/macOS/Windows CI coverage.
 - Kept third-party skill bodies, private product evidence, customer data, protected examples, and hidden assets outside the public archive.

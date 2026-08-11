@@ -120,6 +120,53 @@ def test_cli_rejects_non_finite_pacing_as_valid_json_error(monkeypatch, capsys):
     assert captured.out == ""
 
 
+def test_cli_reports_missing_image_without_traceback(monkeypatch, capsys, tmp_path):
+    missing = tmp_path / "missing.png"
+    monkeypatch.setattr(sys, "argv", ["aisthesis", "inspect", str(missing)])
+
+    with pytest.raises(SystemExit) as raised:
+        main()
+
+    assert raised.value.code == 2
+    captured = capsys.readouterr()
+    assert "ERROR:" in captured.err
+    assert missing.name in captured.err
+    assert "Traceback" not in captured.err
+    assert captured.out == ""
+
+
+def test_cli_reports_unwritable_output_without_traceback(monkeypatch, capsys, tmp_path):
+    output = tmp_path / "missing-parent" / "result.json"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "aisthesis",
+            "pace",
+            "--travel",
+            "1000",
+            "--viewport-height",
+            "900",
+            "--start",
+            "0.2",
+            "--end",
+            "0.8",
+            "--output",
+            str(output),
+        ],
+    )
+
+    with pytest.raises(SystemExit) as raised:
+        main()
+
+    assert raised.value.code == 2
+    captured = capsys.readouterr()
+    assert "ERROR:" in captured.err
+    assert "Traceback" not in captured.err
+    assert captured.out == ""
+    assert not output.exists()
+
+
 def test_json_writer_rejects_non_standard_numbers(tmp_path):
     from aisthesis.cli import _write
 

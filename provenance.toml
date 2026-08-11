@@ -16,7 +16,7 @@ installer = "none"
 
 [generated]
 path = "manifest.json"
-sha256 = "b4bdbb7549ac48d6a7d5f62e36ca2baa1af2b2a677e73b6bc97c78c4ca8cec68"
+sha256 = "739045406dbc479913f84173f6ffbd448be2f43360e1e76b0548d42b57837319"
 origin = "LCFR deterministic release builder"
 license = "MIT"
 
@@ -28,13 +28,13 @@ license = "MIT"
 
 [[files]]
 path = "SKILL.md"
-sha256 = "23a00b571b14410e7bfc2c9e63c19aadcc64f3083f56b1b52377896bdde10611"
+sha256 = "166067321c86e06e34564e436f7884625a599bfce690fb07697c9f83e90bc090"
 origin = "LCFR original complete Aisthesis frontend operating system"
 license = "MIT"
 
 [[files]]
 path = "references/capability-map.md"
-sha256 = "ee5fd88e4b8d88bffb7a0cf22058077f9421a5a1bfb62b7b25ee02be7230f1be"
+sha256 = "53d2979ee1f9710c8f0800a1c97aaed6e4244420881b051c5c8b2bcebd9c4569"
 origin = "LCFR original provenance-safe capability composition map"
 license = "MIT"
 
@@ -52,7 +52,7 @@ license = "MIT"
 
 [[files]]
 path = "references/external-capability-ledger.md"
-sha256 = "1e40e5cbd1c4c55e7fba1f8f460092268e5d06850fe8263e6a714afec92d32ac"
+sha256 = "70d65883e49c411ffef5bd592f797d9361c7cd5cafe3e6f281a7a611970f23b6"
 origin = "LCFR original clean-room capability and provenance ledger"
 license = "MIT"
 
@@ -111,6 +111,12 @@ origin = "LCFR original Aisthesis frontend method"
 license = "MIT"
 
 [[files]]
+path = "references/tool-orchestration.md"
+sha256 = "3532aa1019a59bc98396787bde00f9f2a8273ba95ebde242cb76053a97d2ceae"
+origin = "LCFR original host-tool orchestration method"
+license = "MIT"
+
+[[files]]
 path = "references/typography-and-copy.md"
 sha256 = "ed7dd5adfea9887f0d8d488b4633bcc1eb692acc1af91736563dd9bf5a98e60a"
 origin = "LCFR original Aisthesis frontend method"
@@ -118,8 +124,14 @@ license = "MIT"
 
 [[files]]
 path = "references/visual-evidence.md"
-sha256 = "139053ce4dc9736791a2980763f38b937d2d6f23b7f2ccd0ca0ff3b753d21e5f"
+sha256 = "5fe1d9d35877a4af2bfc5596f211260bf9898f56fa5f572dac79411787e4fe6f"
 origin = "LCFR original Kinetograph and Aisthesis Judgment evidence method"
+license = "MIT"
+
+[[files]]
+path = "scripts/playwright-evidence.mjs"
+sha256 = "2e6b678f3124ac5f766f0601d4bdbedc285bf864f6a2acfe35ecd80772c86ef4"
+origin = "LCFR original portable Playwright evidence adapter"
 license = "MIT"
 
 [[files]]

@@ -20,7 +20,7 @@ The system combines four named layers:
 - **Kinetograph** turns interaction, scrolling, motion, geometry, and browser state into reproducible frames and physical evidence.
 - **Aisthesis Judgment** interprets rendered evidence without reducing taste to a score or overruling human acceptance.
 
-It also contains product-UI architecture, component and design-system methods, responsive art direction, accessibility, performance, dogfooding, security review, and release engineering. External design tools may still be consulted, but none is required.
+It also contains product-UI architecture, component and design-system methods, responsive art direction, accessibility, performance, Playwright browser evidence, dogfooding, security review, and release engineering. It can orchestrate verified host tools and custom functions, but no second design skill is required.
 
 ## Non-negotiable contract
 
@@ -71,6 +71,12 @@ Choose the smallest route that owns the work:
 | Ship | **Release** | `release-contract.md` and all required evidence |
 
 Do not run every lens on every task. The bundle is complete because the right capability is locally available, not because every capability fires at once.
+
+## Orchestrate the available tools
+
+Read `references/tool-orchestration.md` before executing. Inventory the repository's real commands and the agent's current host tools, then map each verified adapter to one Aisthesis responsibility. Prefer the incumbent project's pinned Playwright, accessibility, performance, component, deployment, and asset tooling. Use separately installed Impeccable, Taste, Kinetograph, dogfood, security, media, or custom functions only as optional execution adapters; Aisthesis remains the single authority and completion contract.
+
+For baseline browser evidence, the installed skill includes `scripts/playwright-evidence.mjs`. It resolves Playwright from the host project, captures Chromium and Firefox profiles, records geometry plus console/network failures, refuses output overwrite, and emits machine-readable evidence. Extend the host project's own suite for authenticated journeys, axe, native wheel, touch, performance, or project-specific states. Never infer that a named tool or function exists: inspect its schema or help first.
 
 ## Operating loop
 
@@ -146,7 +152,7 @@ Complete `templates/verification-matrix.md` and `templates/accessibility-audit.m
 
 ### 8. Capture with Kinetograph
 
-Read `references/visual-evidence.md`. Freeze the candidate. Exercise real browser behavior across required engines. For scroll-led work, test actual wheel input in Chromium and Firefox-derived engines plus deterministic progress checkpoints.
+Read `references/visual-evidence.md` and `references/tool-orchestration.md`. Freeze the candidate. Exercise real browser behavior across required engines. Use the bundled Playwright adapter for the baseline when the host project pins Playwright, then extend the project's suite for its real journeys. For scroll-led work, test actual wheel input in Chromium and Firefox-derived engines plus deterministic progress checkpoints.
 
 Capture exact viewport frames, DOM geometry, selected resources, physical travel, interaction state, console and network output. Deterministic checks localize risk; they do not establish taste.
 
@@ -211,6 +217,7 @@ Use one batched audit, one consolidated fix pass, and one confirmation pass. Do 
 - [ ] Direction, architecture, system contract, and complete states implemented
 - [ ] Required responsive, theme, localization, keyboard, touch, zoom, and reduced-motion profiles covered
 - [ ] Chromium and Firefox-derived native behavior exercised for high-risk interaction or scroll work
+- [ ] Host tools and custom functions were schema-checked, mapped to explicit responsibilities, and independently read back
 - [ ] Console, network, overflow, accessibility, security, and performance gates passed
 - [ ] Full-resolution evidence inspected through separate Aisthesis passes
 - [ ] Preview and production parity read back where deployment exists

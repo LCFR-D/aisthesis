@@ -45,8 +45,9 @@ def main() -> None:
 
     args = parser.parse_args()
     if args.command == "inspect":
-        image = np.asarray(Image.open(args.image).convert("RGB"))
         try:
+            with Image.open(args.image) as source:
+                image = np.asarray(source.convert("RGB"))
             result = {
                 "image": str(Path(args.image)),
                 "horizontalSeams": detect_horizontal_seams(
@@ -58,8 +59,8 @@ def main() -> None:
                 "judgmentBoundary": "Candidates are measurements, not an aesthetic verdict or human acceptance.",
             }
             _write(result, args.output)
-        except (TypeError, ValueError) as error:
-            parser.error(str(error))
+        except (OSError, TypeError, ValueError) as error:
+            parser.exit(2, f"ERROR: {error}\n")
         return
     profile = {
         "id": args.profile,
@@ -76,8 +77,8 @@ def main() -> None:
     }
     try:
         _write(evaluate_phase_pacing(profile, phase), args.output)
-    except (TypeError, ValueError) as error:
-        parser.error(str(error))
+    except (OSError, TypeError, ValueError) as error:
+        parser.exit(2, f"ERROR: {error}\n")
 
 
 if __name__ == "__main__":

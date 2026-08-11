@@ -73,6 +73,97 @@ def test_release_archive_is_reproducible_and_self_contained(tmp_path: Path) -> N
     assert validate_skill(extracted / "aisthesis") == []
 
 
+def test_portable_playwright_adapter_exposes_controlled_cli(tmp_path: Path) -> None:
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js is not installed")
+
+    script = DEFAULT_SKILL / "scripts" / "playwright-evidence.mjs"
+    help_result = subprocess.run(
+        [node, str(script), "--help"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert help_result.returncode == 0
+    assert "--url" in help_result.stdout
+    assert "chromium" in help_result.stdout.lower()
+    assert "firefox" in help_result.stdout.lower()
+    assert help_result.stderr == ""
+
+    error_result = subprocess.run(
+        [node, str(script)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert error_result.returncode == 2
+    assert error_result.stdout == ""
+    assert error_result.stderr.startswith("ERROR:")
+    assert "--url" in error_result.stderr
+    assert "Traceback" not in error_result.stderr
+
+    output = tmp_path / "evidence"
+    dependency_result = subprocess.run(
+        [
+            node,
+            str(script),
+            "--url",
+            "https://example.com",
+            "--output",
+            str(output),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert dependency_result.returncode == 1
+    assert dependency_result.stdout == ""
+    assert dependency_result.stderr.startswith("ERROR:")
+    assert "Playwright is not installed" in dependency_result.stderr
+    assert not output.exists()
+
+
+def test_one_stop_skill_routes_playwright_and_host_tools() -> None:
+    skill = (DEFAULT_SKILL / "SKILL.md").read_text(encoding="utf-8").lower()
+    orchestration = (
+        (DEFAULT_SKILL / "references" / "tool-orchestration.md")
+        .read_text(encoding="utf-8")
+        .lower()
+    )
+    adapter = (
+        (DEFAULT_SKILL / "scripts" / "playwright-evidence.mjs")
+        .read_text(encoding="utf-8")
+        .lower()
+    )
+
+    for term in (
+        "playwright",
+        "impeccable",
+        "taste",
+        "custom functions",
+        "host tools",
+        "chromium",
+        "firefox",
+        "browser evidence",
+    ):
+        assert term in skill or term in orchestration
+    for term in (
+        "createRequire",
+        "process.cwd()",
+        "chromium",
+        "firefox",
+        "screenshot",
+        "console",
+        "requestfailed",
+        "pageerror",
+        "promise.race",
+        "visibleimages",
+    ):
+        assert term.lower() in adapter
+
+
 def test_readme_checksum_matches_release_bytes(tmp_path: Path) -> None:
     archive, _ = build_release(tmp_path / "release")
     readme = (DEFAULT_SKILL.parent.parent / "README.md").read_text(encoding="utf-8")

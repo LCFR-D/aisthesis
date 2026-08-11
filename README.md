@@ -10,13 +10,13 @@ Aisthesis combines:
 
 - **Metis** for mode, scope, product truth, authority, provenance, and release governance;
 - **Taste and craft** for brief inference, subject-specific direction, structural variety, anti-template constraints, typography, composition, imagery, copy, and bounded polish;
-- **Kinetograph** for deterministic browser capture, authored progress, physical pacing, geometry, native input, and cross-engine evidence;
+- **Kinetograph** for deterministic browser capture, authored progress, physical pacing, geometry, native input, and cross-engine evidence, including a portable project-resolved Playwright adapter;
 - **Aisthesis Judgment** for localized composition, material, hierarchy, continuity, and temporal review while keeping human acceptance authoritative;
 - product-UI architecture, complete states, forms, dashboards, dense interfaces, design systems, tokens, components, responsive art, accessibility, performance, dogfooding, security review, and release engineering.
 
 It absorbs the functional coverage of LCFR's full frontend stack, including Impeccable, Taste, Hallmark, Frontend Design, UI/UX pattern intelligence, interaction craft, brand-system development, responsive generated art, scrolltelling QA, performance, dogfooding, and code review. The public instructions are independently written and provenance-safe. No separately installed design skill is required.
 
-The extracted skill is standalone procedural guidance with its own templates and schemas. It adapts to the host project's existing browser, accessibility, performance, and build tools; the repository's Python judgment toolkit and external CLIs are optional accelerators, not runtime requirements.
+The extracted skill is standalone procedural guidance with its own templates, schemas, tool-orchestration contract, and portable Playwright evidence adapter. It adapts to verified host tools and custom functions; the repository's Python judgment toolkit and external specialist CLIs remain optional accelerators, not runtime requirements.
 
 ## Agent Skill
 
@@ -24,7 +24,7 @@ The canonical standalone skill is [`skills/aisthesis`](skills/aisthesis/SKILL.md
 
 ### Install the skill
 
-Download the immutable `aisthesis-v1.0.0` release assets. The reviewed archive SHA-256 is `a0234d2027cb7585c47b35e6465ba36c7e0dd8a19385bec5af8c991a71cb5775`.
+Download the immutable `aisthesis-v1.0.0` release assets. The reviewed archive SHA-256 is `355584b61e31789e011387481c3b84f0e377f3c8e03be8e0e463b90a79cea6b0`.
 
 **POSIX shell:**
 
@@ -95,7 +95,7 @@ if ($null -ne (Get-Item -LiteralPath $Target -Force -ErrorAction SilentlyContinu
     throw "Refusing to replace $Target"
 }
 $Archive = "aisthesis-1.0.0.zip"
-$Expected = "a0234d2027cb7585c47b35e6465ba36c7e0dd8a19385bec5af8c991a71cb5775"
+$Expected = "355584b61e31789e011387481c3b84f0e377f3c8e03be8e0e463b90a79cea6b0"
 Invoke-WebRequest "https://github.com/LCFR-D/aisthesis/releases/download/aisthesis-v1.0.0/$Archive" -OutFile $Archive
 if ((Get-FileHash $Archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $Expected) {
     throw "Archive checksum mismatch"

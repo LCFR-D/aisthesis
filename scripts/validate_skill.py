@@ -46,6 +46,8 @@ REQUIRED_PATHS = frozenset(
         "references/provenance.md",
         "references/capability-map.md",
         "references/external-capability-ledger.md",
+        "references/tool-orchestration.md",
+        "scripts/playwright-evidence.mjs",
         "templates/brief.md",
         "templates/design-direction.md",
         "templates/experience-architecture.md",

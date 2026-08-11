@@ -8,7 +8,7 @@ Aisthesis is standalone. Every capability below is available inside this skill; 
 |---|---|---|
 | Metis | Mode, scope, product truth, authority, provenance, evidence, stop conditions | `SKILL.md`, `methodology.md` |
 | Taste and craft | Brief inference, direction, anti-template decisions, typography, composition, imagery, copy, final craft floor | `direction-and-taste.md`, `design-and-brand.md`, `typography-and-copy.md` |
-| Kinetograph | Deterministic browser capture, authored progress, physical travel, geometry, real-wheel behavior, cross-engine evidence | `visual-evidence.md` |
+| Kinetograph | Deterministic browser capture, authored progress, physical travel, geometry, real-wheel behavior, cross-engine evidence | `visual-evidence.md`, `tool-orchestration.md`, `scripts/playwright-evidence.mjs` |
 | Aisthesis Judgment | Localized composition, material, hierarchy, continuity, pacing, and calibrated human acceptance | `visual-evidence.md`, repository Python package |
 
 ## Absorbed capability families
@@ -35,6 +35,7 @@ The names in this table identify the source capability family and make provenanc
 | Performance | Core Web Vitals, asset delivery, runtime cost, bundle discipline, and visual-fidelity protection | `release-contract.md` |
 | Dogfood | Exploratory charters, primary journeys, failure and recovery, history navigation, touch, keyboard, severity, reproducibility, and visitor-perspective defects | `release-contract.md`, `templates/issue-ledger.md` |
 | Code and security review | Logic, injection boundaries, dependencies, privacy, maintainability, regression, and release readiness | `release-contract.md` |
+| Tool and function orchestration | Project-pinned Playwright, host browser tools, specialist adapters, project scripts, and custom functions under one verified authority and evidence contract | `tool-orchestration.md`, `scripts/playwright-evidence.mjs` |
 
 ## Coverage by surface
 
